@@ -14,8 +14,6 @@ public:
     virtual ~List() {
     };
 
-    // Contrato de la clase List
-
     // Devuelve el elemento en el frente de la lista
     virtual T front() = 0;
 

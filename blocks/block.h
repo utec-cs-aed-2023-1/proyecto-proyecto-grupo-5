@@ -83,7 +83,7 @@ private:
     // Realiza el minado para vakidar la seguridad del bloque por el codigohash
     // * Calcula el hash del bloque actual y se compara con el hash objetivo
     // * Si el hash actual no es igual al hash objetivo, se incrementa el nonce
-    void Block::mineBlock() {
+    void mineBlock() {
         std::string target(DIFFICULTY, '0');
         while (hash.substr(0, DIFFICULTY) != target) {
             nonce++;

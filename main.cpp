@@ -11,7 +11,6 @@ int main() {
 // por SFML
 /*
 #include <iostream>
-#include "structures/heap.h"
 #include "interface/gui.h"
 
 using namespace std;

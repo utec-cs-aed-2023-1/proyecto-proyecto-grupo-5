@@ -7,16 +7,6 @@
 template <typename T>
 class DoubleList : public List<T> {
 private:
-    // struct Node {
-    //     T data;
-    //     NodeList<T>* next = nullptr;
-    //     NodeList<T>* prev = nullptr;
-    //     Node() {}
-    //     Node(T value): data(value) {}
-    //     ~Node() {}
-    // };
-
-private:
     NodeList<T>* head = nullptr;
     NodeList<T>* tail = nullptr;
     int nodes;
@@ -63,7 +53,7 @@ public:
     }
 
     void push_front(T data) {
-        NodeList<T> *new_node = new Node(data);
+        NodeList<T> *new_node = new NodeList<T>(data);
         if (head == nullptr) {
             head = tail = new_node;
         } else {
@@ -75,7 +65,7 @@ public:
     }
 
     void push_back(T data) {
-        NodeList<T> *new_node = new Node(data);
+        NodeList<T> *new_node = new NodeList<T>(data);
         if (tail == nullptr) {
             head = tail = new_node;
         } else {
@@ -92,7 +82,7 @@ public:
         }
         T data = head->data;
         if (head->next == nullptr)
-            head == tail == nullptr;
+            head = tail = nullptr;
 
         else {
             head = head->next;
@@ -109,7 +99,7 @@ public:
         }
         T data = tail->data;
         if (tail->prev == nullptr)
-            head == tail == nullptr;
+            head = tail = nullptr;
 
         else {
             tail = tail->prev;
@@ -128,7 +118,7 @@ public:
             push_front(value);       return;
         }
 
-        NodeList<T>* new_node = new Node(value);
+        NodeList<T>* new_node = new NodeList<T>(value);
         if (head == nullptr)         head = new_node;
 
         else {

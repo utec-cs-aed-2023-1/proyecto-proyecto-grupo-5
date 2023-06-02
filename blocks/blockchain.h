@@ -8,6 +8,7 @@
 #include "../structures/chainHash.h"
 
 using namespace std;
+using std::cout;
 
 typedef DoubleList<Block*> LBlocks;
 typedef ChainHash<string, Block*> hashBlock;
@@ -41,7 +42,7 @@ public:
   void MaxAmount(const std::string &username, const std::string &password); // Mariel
   void MinAmount(const std::string &username, const std::string &password); // Mariel
   void cascade(const string &username, const string &password); // Mariel
-  void downloadFile(const std::string& path = "./assets/data/datos.txt"); //Mariel
+  void downloadFile(const std::string& path); //Mariel
   
 };
 
@@ -69,6 +70,7 @@ BlockChain::BlockChain(const string &fileUsers, const string &fileTransactions){
 
 void BlockChain::init_blockchain() {
     // recrea la interfaz en consola del blockchain
+    cout << "Fine proyect" << endl;
 }
 
 

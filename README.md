@@ -42,17 +42,17 @@
 
 <hr>
 
-## Acerca del proyecto
+# Acerca del proyecto
 
-### Introducción
+## Introducción
 
-#### ¿Qué es BlockChain?
+### ¿Qué es BlockChain?
 
 Es una cadena de bloques descentralizada de registro de datos que utiliza una red de nodos para almacenar y validar transacciones de forma transparente y segura, lo que permite la creación de registros inmutables y confiables.
 
 ![](assets/BlockChain.avif)
 
-#### ¿Qué es SHA-256? (Secure Hash Algorithm 256-bit)
+### ¿Qué es SHA-256? (Secure Hash Algorithm 256-bit)
 
 Es un algoritmo de hash criptográfico ampliamente utilizado que produce una huella digital de 256 bits(32 bytes) única para cualquier dato dado, lo que garantiza la integridad y seguridad de la información. Ofrece un mayor nivel de seguridad que MD5 y SHA-1 (versiones anteriores) y se considera seguro para su uso en la mayoría de los casos.
 
@@ -60,18 +60,18 @@ Es un algoritmo de hash criptográfico ampliamente utilizado que produce una hue
     <img src="assets/SHA-256.png" width="algo">
 </div><br>
 
-### Descripción
+## Descripción
 El dominio transaccional que hemos escogido es : Retiros de dinero (cliente, lugar, monto, fecha). 
 
-### Importancia del Blockchain
+## Importancia del Blockchain
  
 La importancia de blockchain radica en su capacidad para proporcionar seguridad en las transacciones a través de su registro distribuido en bloques. Cada bloque está enlazado con el bloque anterior mediante una función criptográfica, lo que garantiza la integridad de la cadena. Esto significa que, en caso de un intento de modificación o ataque, todos los bloques posteriores se vuelven inaccesibles o inválidos, lo que proporciona una mayor protección contra la manipulación de datos.
 
 <hr>
 
-## Funcionalidad de la aplicación
+# Funcionalidad de la aplicación
 
-### Estructuras de datos utilizadas
+## Estructuras de datos utilizadas
 
 <div align="center">
     <img src="assets/estructuraDatos.png" width="700">
@@ -80,7 +80,7 @@ La importancia de blockchain radica en su capacidad para proporcionar seguridad 
 - ### Heap
 
 <div align="center">
-    <img src="assets/heap.jpeg" width="algo">
+    <img src="assets/heap.jpeg" width="300">
 </div><br>
 
 1. *Priorización de transacciones*: Si deseas procesar las transacciones de retiro de dinero en un orden específico, puedes utilizar un heap para mantener un orden de prioridad. Por ejemplo, si tienes transacciones urgentes que requieren un procesamiento rápido, puedes asignarles una mayor prioridad y colocarlas en la parte superior del heap. De esta manera, puedes garantizar que las transacciones más importantes se procesen primero.
@@ -121,7 +121,7 @@ Escenarios donde se puede utilizar **doublelist**:
 
 <hr>
 
-### Proof of Work
+## Proof of Work
 
 Es un algoritmo de consenso permite verificar si quien contribuye al blockchain lo hace de forma legítima o está incurriendo en fraude. Permite la verificación, evitar ataques mediante el 51% y cualquier mecanismo que permita mantener al correcto crecimiento del blockchain.
 
@@ -129,7 +129,7 @@ El proof of work que implementamos es una verificación en la cual el número de
 
 <hr>
 
-### Análisis algorítmico
+## Análisis algorítmico
 
 Estas son los métodos implementados actualmente en el BlockChain:
 
@@ -168,7 +168,7 @@ Descarga las transacciones del blockchain en un archivo de texto en la ubicació
 
 <hr>
 
-### Interfaz gráfica
+## Interfaz gráfica
 
 - Se está trabajando con SFML.
 - Interfaz gráfica en proceso
@@ -176,35 +176,35 @@ Descarga las transacciones del blockchain en un archivo de texto en la ubicació
 
 <hr>
 
-## Ambiente de la aplicación
+# Ambiente de la aplicación
 
-### Requerimientos
+## Requerimientos
 
 - Compilador g++ de [MinGW-w64](https://www.mingw-w64.org/downloads/).
 - Bibioteca [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/) desde la versión 2.4 o 2.5.
 - [Make](https://gnuwin32.sourceforge.net/packages/make.htm) para Windows.
  
-### ¿Cómo se ejecuta?
+## ¿Cómo se ejecuta?
 
 1. Agregar el directorio `C:\SFML-2.5.x` en las variables del sistema.
 2. Agregar el directorio `C:\Program Files (x86)\GnuWin32\bin` en las variables del sistema. 
-3. Inicia la aplicación con el archivo: 
+3. Inicia la aplicación con estos comandos: 
 
 ```bash
-./start.bat
+make clean && make run
 ```
 
 
 <hr>
 
-## Conclusiones
+# Conclusiones
 
 - El blockchain nos ha ayudado a poder proteger mejor nuestra estructura de datos y de esa manera darle confianza a nuestro cliente para con la integridad de sus datos y demás. 
 - Las estructuras de datos como **heap, chain hash y double list** son fundamentales en **blockchain** debido a su importancia en la eficiencia y seguridad del sistema. El heap permite una gestión eficiente de las transacciones y bloques, asegurando un ordenamiento óptimo. El chain hash proporciona una forma rápida de acceder a los bloques anteriores y verificar la integridad de la cadena. El double list permite un acceso rápido y eficiente a los datos, facilitando la validación y el seguimiento de transacciones en la cadena de bloques. En resumen, estas estructuras de datos mejoran la velocidad, la seguridad y la escalabilidad del sistema blockchain.
 
 <hr>
 
-## Referencias bibliográficas
+# Referencias bibliográficas
 
 [OpenSSL](https://www.openssl.org/)
 
@@ -224,9 +224,9 @@ Moreno, M. V. (2022). Blockchain y algoritmo de consenso Proof of Work. *MoleQla
     
 <hr>
 
-## Anexos
+# Anexos
 
-### Participación grupal
+## Participación grupal
 
 | Integrantes | Código | Actividad Concluida | Porcentaje de participación |
 |----------|----------|----------|----------|

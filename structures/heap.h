@@ -16,7 +16,7 @@ private:
     Type type;
 
 public:
-    Heap(Type type = MAX_HEAP) = default;
+    Heap(Type type = MAX_HEAP) {};
 
     Heap(T *array, int elem, Type type = MAX_HEAP) : elements(elem), capacity(elem), type(type) {
         buildFromArray(array, elem);

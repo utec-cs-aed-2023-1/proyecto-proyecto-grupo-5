@@ -1,5 +1,6 @@
 #include <sstream>
 #include "doubleList.h"
+#include <cmath>
 using namespace std;
 
 const int maxColision = 3;
@@ -70,7 +71,7 @@ public:
     bool search(TK key) {
         try{
             TV bound = get(key);   return true;
-        } catch {
+        } catch (string e) {
             return false;
         }
     }
