@@ -1,5 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
+#include <sstream>
 
 template<typename T>
 struct NodeList {
@@ -21,6 +22,17 @@ struct NodeList {
         next->prev = prev;  // El anterior del siguiente nodo apunta al nodo anterior
         next = nullptr;     // Establece el siguiente del nodo actual como nullptr
         prev = nullptr;     // Establece el anterior del nodo actual como nullptr
+    }
+
+    std::string to_string(std::string sep = " ") {
+        std::stringstream ss;
+        NodeList<T>* temp = this;
+        while (temp != nullptr) {
+            ss << temp->data << sep;
+            temp = temp->next;
+        }
+        std::string res = ss.str();
+        return res.substr(0, res.size()-sep.size());
     }
 };
 

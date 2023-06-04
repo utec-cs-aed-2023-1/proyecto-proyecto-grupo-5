@@ -1,4 +1,6 @@
 // codigo de la tarea anterior hecha por nosotros
+#ifndef DOUBLELIST_H
+#define DOUBLELIST_H
 
 #include <iostream>
 #include "list.h"
@@ -123,16 +125,10 @@ public:
 
         else {
             NodeList<T>* temp;
-            if (index+1 > nodes/2) {
-                temp = tail;
-                while (index-- > nodes/2)
-                    temp = temp->prev;
-            }
-            else {
-                temp = head;
-                while (index-- > 0)
-                    temp = temp->next;
-            }
+            temp = head;
+            while (index-- > 0)
+                temp = temp->next;
+
             new_node->next = temp;
             new_node->prev = temp->prev;
             temp->prev->next = new_node;
@@ -170,7 +166,7 @@ public:
     bool search(T value) {
         NodeList<T>* temp = head;
         while (temp != nullptr) {
-            if (temp->data = value)
+            if (temp->data == value)
                 return true;
             temp = temp->next;
         }
@@ -213,18 +209,6 @@ public:
         }
     }
 
-    bool is_sorted() {
-        NodeList<T> *current = head;
-        while (current != nullptr && current->next != nullptr) {
-            if (current->data > current->next->data) {
-                return false;
-            }
-            current = current->next;
-        }
-        return true;
-    }
-
-
     std::string name() {
         return "DoubleList";
     }
@@ -237,3 +221,5 @@ public:
         return tail;
     }
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef CHAINHASH_H
+#define CHAINHASH_H
+
 #include <sstream>
 #include "doubleList.h"
 #include <cmath>
@@ -22,8 +25,13 @@ public:
     typedef DoubleList<Entry*> HashList;
     typedef NodeList<Entry*> EntryNode;
 
+    friend ostream& operator<<(ostream& os, Entry* pair) {
+        os << "(" << pair->key << "," << pair->value << ") ";
+        return os;
+    }
+
 private:
-    HashList **buckets = new HashList*[capacityDEF];
+    HashList **buckets;
     int capacity;              //tamanio del buckets
     int size = 0;              //cantidad de elementos totales
 
@@ -31,25 +39,24 @@ public:
 
     ChainHash(): capacity(capacityDEF) {
         buckets = new HashList*[capacityDEF];
+        for (short i=0; i<capacityDEF; ++i) {
+            buckets[i] = new HashList;
+        }
+    }
+
+    ~ChainHash() {
+        for (short i=0; i<capacity; ++i) {
+            delete buckets[i];
+        };
+        delete[] buckets;
     };
-    ~ChainHash() = default;
     
     ChainHash(int capacity): capacity(capacity) {
         buckets = new HashList*[capacity];
-	}
-
-    size_t hashFunction(TK key) {
-        stringstream skey;   skey << key;          // se llama a operator << para pasar a string
-        string strkey = skey.str();
-        int sum;
-
-        // algoritmo Rolling polynomial
-        for (int i = 0; i < strkey.size(); i++) {
-            sum += (strkey[i] * (int)pow(PRIMECONST, i)) % capacity;
+        for (short i=0; i<capacity; ++i) {
+            buckets[i] = new HashList;
         }
-
-        return sum % capacity;
-    }
+	}
 
     void set(TK key, TV value){
         size_t index = hashFunction(key);
@@ -59,6 +66,7 @@ public:
     TV get(TK key){
         size_t index = hashFunction(key);
         EntryNode* nodetemp = buckets[index]->begin();
+        cout << index << endl;
         while (nodetemp != nullptr) {
             if (nodetemp->data->key == key)
                 return nodetemp->data->value; 
@@ -67,6 +75,19 @@ public:
         }
         throw std::out_of_range("key unbound in hashtable");
     };
+
+    void viewHash() {
+        for (int i=0; i<capacity; ++i) {
+            EntryNode* nodetemp = buckets[i]->begin();
+            cout << "Bucket " << i+1 << " size: " << bucket_size(i) << "\n -- ";
+            while (nodetemp != nullptr) {
+                cout << nodetemp->data << " ";
+
+                nodetemp = nodetemp->next;
+            }
+            cout << endl;
+        }
+    }
 
     bool search(TK key) {
         try{
@@ -110,4 +131,19 @@ private:
 
         capacity = capacity*2;
     }
+
+    size_t hashFunction(TK key) {
+        stringstream skey;   skey << key;          // se llama a operator << para pasar a string
+        string strkey = skey.str();
+        int sum = 0;
+
+        // algoritmo Rolling polynomial
+        for (int i = 0; i < strkey.size(); i++) {
+            sum += (strkey[i] * (int)pow(PRIMECONST, i)) % capacity;
+        }
+
+        return sum % capacity;
+    }
 };
+
+#endif

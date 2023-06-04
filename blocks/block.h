@@ -8,7 +8,7 @@
 #include <openssl/sha.h> 
 #include "../structures/heap.h"
 #include "../structures/doubleList.h"
-// #include "../structures/chainHash.h"
+#include "../utils/SHA256.h"
 #include "transaction.h"
 
 using namespace std;
@@ -67,16 +67,7 @@ private:
         std::stringstream ss;
         ss << index << timestamp << previousHash << nonce;
         std::string input = ss.str();
-
-        unsigned char hash[SHA256_DIGEST_LENGTH];
-        SHA256((unsigned char*)input.c_str(), input.length(), hash);
-
-        std::stringstream hashStream;
-        for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i) {
-            hashStream << std::hex << (int)hash[i];
-        }
-
-        return hashStream.str();
+        return sha256(input);
     }
 
 

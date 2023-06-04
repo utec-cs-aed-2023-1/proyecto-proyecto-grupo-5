@@ -10,9 +10,10 @@ using namespace std;
 template <typename T>
 class List {
 public:
+    List() = default;
+
     // Destructor virtual por defecto, no es necesario implementarlo en las clases hijas.
-    virtual ~List() {
-    };
+    virtual ~List() {};
 
     // Devuelve el elemento en el frente de la lista
     virtual T front() = 0;
@@ -38,6 +39,8 @@ public:
     // Elimina un elemento de la lista en una posición específica
     virtual void remove(int) = 0;
 
+    virtual bool search(T) = 0;
+
     // Sobrecarga del operador de indexación para acceder a los elementos de la lista por índice
     virtual T& operator[](int) = 0;
 
@@ -49,8 +52,6 @@ public:
 
     // Elimina todos los elementos de la lista
     virtual void clear() = 0;
-
-    virtual bool search(T) = 0;
 
     // Ordena los elementos de la lista
     virtual void sort() = 0;
