@@ -87,14 +87,14 @@ void BlockChain::init_blockchain() {
 
 void BlockChain::createUser(const string &username, const string &password){
     string hash = username + "&&" + password;
-    cout << "crea " << hash << endl;
+    // cout << "crea " << hash << endl;
     Block* block = (cantblocks == 0)? new Block :
         new Block(cantblocks, blocks->end()->data->getHash());
     
     blocks->push_back(block);
-    cout << "push list" << endl;
+    // cout << "push list" << endl;
     usersHash->set(hash, block);
-    cout << "push hash" << endl;
+    // cout << "push hash" << endl;
     ++cantblocks;
 }
 
@@ -119,7 +119,7 @@ void BlockChain::insertTransaction(const string &username, const string &passwor
     }
     Transaction transaccion(username,place, date, amount);
     usersHash->get(hash)->insert(transaccion);
-    std::cout << "end\n\n";
+    // std::cout << "end\n\n";
 }
 
 /*

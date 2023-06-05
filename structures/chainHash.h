@@ -67,11 +67,11 @@ public:
     TV& get(TK key){
         size_t index = hashFunction(key);
         EntryNode* nodetemp = buckets[index]->begin();
-        cout << "index get " << index << endl;
+        // cout << "index get " << index << endl;
         while (nodetemp != nullptr) {
-            cout << "key: " << nodetemp->data.key << " == " << key << endl;
+            // cout << "key: " << nodetemp->data.key << " == " << key << endl;
             if (nodetemp->data.key == key)  {
-                cout << "done << " << nodetemp->data.value << endl;
+                // cout << "done << " << nodetemp->data.value << endl;
                 return nodetemp->data.value; 
             }
             nodetemp = nodetemp->next;
@@ -94,7 +94,7 @@ public:
 
     bool search(TK key) {
         size_t index = hashFunction(key);
-        cout << "index search " << index << endl;
+        // cout << "index search " << index << endl;
         EntryNode* nodetemp = buckets[index]->begin();
         while (nodetemp != nullptr) {
             if (nodetemp->data.key == key)
@@ -147,13 +147,8 @@ private:
 
         // algoritmo Rolling polynomial
         for (int i = 0; i < strkey.size(); i++) {
-            int cter = (int)strkey[i];
-            int power = (int)pow(PRIMECONST, i);
-            int res = cter * power;
-            // cout << " --- resolv in : " << strkey[i] << endl;
-            // cout << "--- " << cter << " * " << power << " = " << res << endl;
+            int res = (int)strkey[i] * (int)pow(PRIMECONST, i);
             sum += res % capacity;
-            // cout << " --- " << sum << endl;
         }
 
         return sum % capacity;

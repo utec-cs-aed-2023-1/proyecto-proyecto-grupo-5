@@ -17,9 +17,7 @@ typedef DoubleList<Transaction> TxList;
 typedef Heap<Transaction> TxHeap;
 typedef NodeList<Transaction> TxNode;
 
-// const CompTransaction minorAmount = [](const Transaction& a, const Transaction& b) { return a.amount < b.amount; };
 const CompTransaction mayorAmount = [](const Transaction& a, const Transaction& b) { return a.amount > b.amount; };
-// const CompTransaction minorDate = [](const Transaction& a, const Transaction& b) { return a.date < b.date; };
 const CompTransaction mayorDate = [](const Transaction& a, const Transaction& b) { return unixToDate(a.date) > unixToDate(b.date); };
 
 // Definición de la estructura del bloque
@@ -29,10 +27,10 @@ private:
     string timestamp;              // Marca de tiempo en la que se crea el bloque
     
     TxList* list_data = new TxList;
-    TxHeap* minheap_amount = new TxHeap(TxHeap::MIN_HEAP, mayorAmount);
+    TxHeap* minheap_amount = new TxHeap(mayorAmount, TxHeap::MIN_HEAP);
     
     TxHeap* maxheap_amount = new TxHeap(mayorAmount);
-    TxHeap* minheap_date = new TxHeap(TxHeap::MIN_HEAP, mayorDate);
+    TxHeap* minheap_date = new TxHeap(mayorDate, TxHeap::MIN_HEAP); 
     
     TxHeap* maxheap_date = new TxHeap(mayorDate);
     
@@ -113,18 +111,14 @@ private:
 
     // Inserta una nueva transaccion
     void insert(Transaction transaction) {
+
         list_data->push_back(transaction);
-        cout << "Tx list" << endl;
         minheap_amount->push(transaction);
-        cout << "Tx heaps" << endl;
         maxheap_amount->push(transaction);
-        cout << "Tx heaps" << endl;
         minheap_date->push(transaction);
-        cout << "Tx heaps" << endl;
         maxheap_date->push(transaction);
-        cout << "Tx heaps" << endl;
         this->hash = calculateHash();
-        // mineBlock();
+        mineBlock();
     }
 
     string getHash() {
