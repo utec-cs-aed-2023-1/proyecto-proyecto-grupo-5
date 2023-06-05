@@ -41,6 +41,8 @@ public:
 
     virtual bool search(T) = 0;
 
+    virtual bool find(T) = 0;
+
     // Sobrecarga del operador de indexación para acceder a los elementos de la lista por índice
     virtual T& operator[](int) = 0;
 
@@ -54,7 +56,7 @@ public:
     virtual void clear() = 0;
 
     // Ordena los elementos de la lista
-    virtual void sort() = 0;
+    // virtual void sort() = 0;
 
     // Verifica si los elementos de la lista están ordenados
     // virtual bool is_sorted() = 0;

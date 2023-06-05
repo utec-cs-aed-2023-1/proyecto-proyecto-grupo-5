@@ -3,13 +3,9 @@
 
 #include <sstream>
 #include "doubleList.h"
+#include "../utils/constants.h"
 #include <cmath>
 using namespace std;
-
-const int maxColision = 3;
-const float maxFillFactor = 0.5;
-const unsigned int PRIMECONST = 31;
-const int capacityDEF = 10;
 
 template<typename TK, typename TV>
 class ChainHash {
@@ -18,15 +14,20 @@ private:
         TK key;
         TV value;
         Entry(const TK& key, TV value): key(key), value(value) {}
+
+        bool operator==(const Entry pair2) {
+            return this->key == pair2.key && this->value == pair2.value;
+        }
+        
         ~Entry() = default;
     };
 
 public:
-    typedef DoubleList<Entry*> HashList;
-    typedef NodeList<Entry*> EntryNode;
+    typedef DoubleList<Entry> HashList;
+    typedef NodeList<Entry> EntryNode;
 
-    friend ostream& operator<<(ostream& os, Entry* pair) {
-        os << "(" << pair->key << "," << pair->value << ") ";
+    friend ostream& operator<<(ostream& os, Entry pair) {
+        os << "(" << pair.key << "," << pair.value << ") ";
         return os;
     }
 
@@ -58,19 +59,21 @@ public:
         }
 	}
 
-    void set(TK key, TV value){
+    void set(TK key, TV& value){
         size_t index = hashFunction(key);
-        buckets[index]->push_front(new Entry(key, value));
+        buckets[index]->push_front(Entry(key, value));
     }
 
-    TV get(TK key){
+    TV& get(TK key){
         size_t index = hashFunction(key);
         EntryNode* nodetemp = buckets[index]->begin();
-        cout << index << endl;
+        cout << "index get " << index << endl;
         while (nodetemp != nullptr) {
-            if (nodetemp->data->key == key)
-                return nodetemp->data->value; 
-
+            cout << "key: " << nodetemp->data.key << " == " << key << endl;
+            if (nodetemp->data.key == key)  {
+                cout << "done << " << nodetemp->data.value << endl;
+                return nodetemp->data.value; 
+            }
             nodetemp = nodetemp->next;
         }
         throw std::out_of_range("key unbound in hashtable");
@@ -90,11 +93,16 @@ public:
     }
 
     bool search(TK key) {
-        try{
-            TV bound = get(key);   return true;
-        } catch (string e) {
-            return false;
-        }
+        size_t index = hashFunction(key);
+        cout << "index search " << index << endl;
+        EntryNode* nodetemp = buckets[index]->begin();
+        while (nodetemp != nullptr) {
+            if (nodetemp->data.key == key)
+                return true; 
+
+            nodetemp = nodetemp->next;
+        } 
+        return false;
     }
 
     int bucket_count() const {
@@ -124,7 +132,7 @@ private:
         for (HashList* entry : newbuckets) {
             EntryNode* temp = entry->begin();
             while (temp != nullptr) {
-                set(temp->key, temp->value);
+                set(temp.key, temp.value);
                 temp = temp->next;
             }
         }
@@ -139,7 +147,13 @@ private:
 
         // algoritmo Rolling polynomial
         for (int i = 0; i < strkey.size(); i++) {
-            sum += (strkey[i] * (int)pow(PRIMECONST, i)) % capacity;
+            int cter = (int)strkey[i];
+            int power = (int)pow(PRIMECONST, i);
+            int res = cter * power;
+            // cout << " --- resolv in : " << strkey[i] << endl;
+            // cout << "--- " << cter << " * " << power << " = " << res << endl;
+            sum += res % capacity;
+            // cout << " --- " << sum << endl;
         }
 
         return sum % capacity;

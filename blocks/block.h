@@ -5,34 +5,39 @@
 #include <ctime>
 #include <sstream>
 #include <string>
-#include <openssl/sha.h> 
 #include "../structures/heap.h"
 #include "../structures/doubleList.h"
 #include "../utils/SHA256.h"
 #include "transaction.h"
 
 using namespace std;
-const int DIFFICULTY = 4;       // Número de ceros iniciales requeridos en el hash
-const string HashGenesis(64, '0');
+
+typedef std::function<bool(const Transaction&, const Transaction&)> CompTransaction;
+typedef DoubleList<Transaction> TxList;
+typedef Heap<Transaction> TxHeap;
+typedef NodeList<Transaction> TxNode;
+
+// const CompTransaction minorAmount = [](const Transaction& a, const Transaction& b) { return a.amount < b.amount; };
+const CompTransaction mayorAmount = [](const Transaction& a, const Transaction& b) { return a.amount > b.amount; };
+// const CompTransaction minorDate = [](const Transaction& a, const Transaction& b) { return a.date < b.date; };
+const CompTransaction mayorDate = [](const Transaction& a, const Transaction& b) { return unixToDate(a.date) > unixToDate(b.date); };
 
 // Definición de la estructura del bloque
 class Block {
-public:
-    typedef DoubleList<Transaction*> TxList;
-    typedef Heap<Transaction*> TxHeap;
-
 private:
     int index;                          // Índice del bloque en la cadena
-    std::string timestamp;              // Marca de tiempo en la que se crea el bloque
+    string timestamp;              // Marca de tiempo en la que se crea el bloque
     
     TxList* list_data = new TxList;
-    TxHeap* minheap_amount = new TxHeap(TxHeap::MIN_HEAP);
-    TxHeap* maxheap_amount = new TxHeap;
-    TxHeap* minheap_date = new TxHeap(TxHeap::MIN_HEAP);
-    TxHeap* maxheap_date = new TxHeap;
+    TxHeap* minheap_amount = new TxHeap(TxHeap::MIN_HEAP, mayorAmount);
     
-    std::string previousHash;           // Hash del bloque anterior en la cadena
-    std::string hash;                   // Hash del bloque actual
+    TxHeap* maxheap_amount = new TxHeap(mayorAmount);
+    TxHeap* minheap_date = new TxHeap(TxHeap::MIN_HEAP, mayorDate);
+    
+    TxHeap* maxheap_date = new TxHeap(mayorDate);
+    
+    string previousHash;           // Hash del bloque anterior en la cadena
+    string hash;                   // Hash del bloque actual
     int nonce = 0;                      // Número utilizado en la Prueba de Trabajo
 
  public:
@@ -43,7 +48,7 @@ private:
         this->timestamp = to_string(time(0));
         this->previousHash = prevHash;
         this->hash = calculateHash();
-        mineBlock();
+        // mineBlock();
     }
 
     ~Block() {
@@ -63,10 +68,10 @@ private:
 
 
     // Calcula el codigoash con la información del bloque
-    std::string calculateHash() {
-        std::stringstream ss;
+    string calculateHash() {
+        stringstream ss;
         ss << index << timestamp << previousHash << nonce;
-        std::string input = ss.str();
+        string input = ss.str();
         return sha256(input);
     }
 
@@ -75,33 +80,51 @@ private:
     // * Calcula el hash del bloque actual y se compara con el hash objetivo
     // * Si el hash actual no es igual al hash objetivo, se incrementa el nonce
     void mineBlock() {
-        std::string target(DIFFICULTY, '0');
+        string target(DIFFICULTY, '0');
         while (hash.substr(0, DIFFICULTY) != target) {
             nonce++;
             hash = calculateHash();
         }
-        std::cout << "Block mined: " << hash << std::endl;
+        // std::cout << "Block mined: " << hash << endl;
     }
 
 
     // Imprimer el bloque con la información de las transacciones en consola
-    void printBlock(Block block){
-        std::cout << "Block Index N°: " << block.index << std::endl;
-        // std::cout << "Timestamp: " << block.timestamp << std::endl; //
-        std::cout << "Previous Hash: " << block.previousHash << std::endl;
-        std::cout << "Hash: " << block.hash << std::endl;
-        std::cout << std::endl;
+    void printBlock(){
+        std::cout << "------------------------------" << endl;
+        std::cout << "------------------------------" << endl;
+        std::cout << "Block Index N°: " << index << endl;
+        std::cout << "-- Created at: " << unixToDate(timestamp) << endl;
+        std::cout << "-- Previous Hash: " << previousHash << endl;
+        std::cout << "-- Hash: " << hash << endl;
+        std::cout << "-- Transactions :" << endl;
+        TxNode* nodetemp = getTransactions()->begin();
+        while (nodetemp != nullptr) {
+            std::cout << "---------" << endl;
+            nodetemp->data.printTransaction();
+            std::cout << "---------" << endl;
+            nodetemp = nodetemp->next;
+        }
+
+        std::cout << "------------------------------" << endl;
+        std::cout << "------------------------------" << endl;
+        delete nodetemp;
     }
 
     // Inserta una nueva transaccion
-    void insert(Transaction* transaction) {
+    void insert(Transaction transaction) {
         list_data->push_back(transaction);
+        cout << "Tx list" << endl;
         minheap_amount->push(transaction);
+        cout << "Tx heaps" << endl;
         maxheap_amount->push(transaction);
+        cout << "Tx heaps" << endl;
         minheap_date->push(transaction);
+        cout << "Tx heaps" << endl;
         maxheap_date->push(transaction);
+        cout << "Tx heaps" << endl;
         this->hash = calculateHash();
-        mineBlock();
+        // mineBlock();
     }
 
     string getHash() {
@@ -113,34 +136,33 @@ private:
     } 
 
     // Valida si se encuentra la transaccion 
-    bool search(Transaction* transaction) {
+    bool search(Transaction transaction) {
         return list_data->search(transaction);
     } 
 
     // -- La transaccion con mayor monto
-    Transaction* maxAmount() {
+    Transaction maxAmount() {
         return maxheap_amount->top();
     }
 
     // -- La transaccion con menor monto
-    Transaction* minAmount() {
+    Transaction minAmount() {
         return minheap_amount->top();
     }
 
     // -- La transaccion con la fecha mas reciente
-    Transaction* maxDate() {
+    Transaction maxDate() {
         return maxheap_date->top();
     }
 
     // -- La transaccion con la fecha mas antigua
-    Transaction* minDate() {
+    Transaction minDate() {
         return minheap_date->top();
     }
 
+    TxList* rangeDate(string date1, string date2); 
 
-    DoubleList<Transaction*> rangeDate(string date1, string date2); 
-
-    DoubleList<Transaction*> rangeAmount(float amount1, float amount2); 
+    TxList* rangeAmount(float amount1, float amount2); 
     
 };
 

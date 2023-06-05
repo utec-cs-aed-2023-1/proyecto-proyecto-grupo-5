@@ -2,7 +2,7 @@
 #define TRANSATION_COMPONENT_H
 
 #include <iostream>
-#include <chrono>
+#include "../utils/unix.h"
 using namespace std;
 
 // Definición de la información dentro de la transacción
@@ -24,25 +24,24 @@ struct Transaction {
     } 
 
     // Función que imprime la transacción en consola.
-    void printTransaction() const {
-        std::time_t unixTimestamp(std::stol(date));
-        string formattedDate = std::asctime(std::localtime(&unixTimestamp));
-
-        std::cout << "Client: " << client << std::endl;
-        std::cout << "Place: " << place << std::endl;
-        std::cout << "Date: " << formattedDate.substr(0, 24) << std::endl;
-        std::cout << "Amount: " << amount << std::endl;
+    void printTransaction() {
+        std::cout << "---- Client: " << client << std::endl;
+        std::cout << "---- Place: " << place << std::endl;
+        std::cout << "---- Date: " << date << std::endl;
+        // std::cout << "---- Date: " << unixToTime(date) << std::endl;
+        std::cout << "---- Amount: " << amount << std::endl;
     }
 };
 
 
 // Representación textual de una transacción   
 ostream &operator<<(ostream &os, const Transaction &tx) {
-    std::time_t unixTimestamp(std::stol(tx.date));
-    std::string date = std::asctime(std::localtime(&unixTimestamp));
-
-    os << "(" << tx.client << " , " << tx.date << ", " << tx.amount << ", " << date.substr(0, 24) << ")";
+    os << "(" << tx.client << " , " << tx.date << ", " << tx.amount << ", " << dateToUnix(tx.date) << ")";
     return os;
+}
+
+bool operator==(const Transaction &tx1, const Transaction &tx2) {
+    return tx1.client == tx2.client && tx1.amount == tx2.amount && tx1.date == tx2.date && tx1.place == tx2.place;
 }
 
 #endif // TRANSATION_COMPONENT_H

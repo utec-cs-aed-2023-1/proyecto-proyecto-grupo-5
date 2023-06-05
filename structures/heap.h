@@ -2,7 +2,9 @@
 #define HEAP_H
 
 #include <iostream>
+#include <functional>
 #include <stdexcept>
+#include "../utils/constants.h"
 
 using namespace std;
 
@@ -15,17 +17,28 @@ public:
 private:
     T *array;
     int capacity;   //capacidad maxima del arbol
-    int elements;   //cantidad de elementos en el arbol
-    Type type;
+    int elements = 0;   //cantidad de elementos en el arbol
+    Type type = MAX_HEAP;
+    std::function<bool(const T&, const T&)> mayor = [](const T& a, const T& b) { return a > b; };
 
 public:
-    Heap(Type type = MAX_HEAP) {};
+    Heap(
+        std::function<bool(const T&, const T&)> mayor, Type type = MAX_HEAP 
+    ): capacity(capacityDEF), mayor(mayor) {
+        this->array = new T[capacityDEF];
+    };
 
-    Heap(T *array, int elem, Type type = MAX_HEAP) : elements(elem), capacity(elem), type(type) {
+    Heap(
+        T *array, int elem, 
+        std::function<bool(const T&, const T&)> mayor, Type type = MAX_HEAP
+    ): elements(elem), capacity(elem), type(type), mayor(mayor) {
         buildFromArray(array, elem);
     }
 
-    Heap(int capacity, Type type = MAX_HEAP) : elements(0), capacity(capacity), type(type) {
+    Heap(
+        int capacity,
+        std::function<bool(const T&, const T&)> mayor, Type type = MAX_HEAP
+    ) : capacity(capacity), type(type), mayor(mayor) {
         this->array = new T[capacity];
     }
 
@@ -102,7 +115,7 @@ public:
         }
         return topk;
     }*/
-
+    /*
     static void sortAsc(T* arr, int n){
         // Construimos un Max Heap
         for (int i = n / 2 - 1; i >= 0; i--)
@@ -122,11 +135,11 @@ public:
         int right = 2 * i + 2;  // Índice del hijo derecho
 
         // Si el hijo izquierdo es más grande que la raíz
-        if (left < n && arr[left] > arr[largest])
+        if (left < n && mayor(arr[left], arr[largest]))
             largest = left;
 
         // Si el hijo derecho es más grande que la raíz
-        if (right < n && arr[right] > arr[largest])
+        if (right < n && mayor(arr[right], arr[largest]))
             largest = right;
 
         // Si el mayor no es la raíz, intercambiamos y volvemos a ajustar
@@ -134,7 +147,7 @@ public:
             swap(arr[i], arr[largest]);
             heapify(arr, n, largest);
         }
-    }        
+    }*/
 
     T* getArray() {
         return array;
@@ -150,18 +163,19 @@ public:
         print(2 * index + 2); cout << " ) ";
     }
 
+    /*
     static void minheapify(T* arr, int n, int i) {
         int smallest = i;     // Inicializar el índice más pequeño como la raíz
         int left = 2 * i + 1; // Índice del hijo izquierdo
         int right = 2 * i + 2; // Índice del hijo derecho
 
         // Si el hijo izquierdo es más pequeño que la raíz
-        if (left < n && arr[left] < arr[smallest]) {
+        if (left < n && !mayor(arr[left], arr[smallest])) {
             smallest = left;
         }
 
         // Si el hijo derecho es más pequeño que el más pequeño hasta ahora
-        if (right < n && arr[right] < arr[smallest]) {
+        if (right < n && !mayor(arr[right], arr[smallest])) {
             smallest = right;
         }
 
@@ -186,7 +200,7 @@ public:
             // Aplicar minheapify al subárbol reducido
             minheapify(arr, i, 0);
         }
-    }
+    }*/
 
 
 private:
@@ -204,21 +218,21 @@ private:
 
     void heapify_down(int i) {
         if (type == MAX_HEAP){
-            if (array[Left(i)] > array[i] && array[Left(i)]>=array[Right(i)] && Left(i) < elements){
+            if (mayor(array[Left(i)], array[i]) && (mayor(array[Left(i)], array[Right(i)]) || array[Left(i)] == array[Right(i)]) && Left(i) < elements){
                 swap(array[Left(i)], array[i]);
                 heapify_down(Left(i));
             }
-            if (array[Right(i)] > array[i] && array[Right(i)]>=array[Left(i)] && Right(i) < elements){
+            if (mayor(array[Right(i)], array[i]) && (mayor(array[Right(i)], array[Left(i)]) || array[Right(i)] == array[Right(i)]) && Right(i) < elements){
                 swap(array[Right(i)], array[i]);
                 heapify_down(Right(i));
             }
         }
         else{
-            if (array[Left(i)] < array[i] && array[Left(i)]<=array[Right(i)] && Left(i) < elements){
+            if (!mayor(array[Left(i)], array[i]) && !mayor(array[Left(i)], array[Right(i)]) && Left(i) < elements){
                 swap(array[Left(i)], array[i]);
                 heapify_down(Left(i));
             }
-            if (array[Right(i)] < array[i] && array[Right(i)]<=array[Left(i)] && Right(i) < elements){
+            if (!mayor(array[Right(i)], array[i]) && !mayor(array[Right(i)]<=array[Left(i)]) && Right(i) < elements){
                 swap(array[Right(i)], array[i]);
                 heapify_down(Right(i));
             }
@@ -228,18 +242,19 @@ private:
 
     void heapify_up(int i) { 
         if (type == MAX_HEAP){
-            if (array[Parent(i)] < array[i] && i > 0){
+            if (!mayor(array[Parent(i)], array[i]) && i > 0){
                 swap(array[Parent(i)], array[i]);
                 heapify_up(Parent(i));
             }
         }
         else{
-            if (array[Parent(i)] > array[i] && i > 0){
+            if (mayor(array[Parent(i)], array[i]) && i > 0){
                 swap(array[Parent(i)], array[i]);
                 heapify_up(Parent(i));
             }
         }
     }
 };
+
 
 #endif
