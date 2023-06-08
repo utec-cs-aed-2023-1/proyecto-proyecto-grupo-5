@@ -18,7 +18,7 @@ typedef Heap<Transaction> TxHeap;
 typedef NodeList<Transaction> TxNode;
 
 const CompTransaction mayorAmount = [](const Transaction& a, const Transaction& b) { return a.amount > b.amount; };
-const CompTransaction mayorDate = [](const Transaction& a, const Transaction& b) { return unixToDate(a.date) > unixToDate(b.date); };
+const CompTransaction mayorDate = [](const Transaction& a, const Transaction& b) { return dateToUnix(a.date) > dateToUnix(b.date); };
 
 // Definición de la estructura del bloque
 class Block {
@@ -69,8 +69,7 @@ private:
     string calculateHash() {
         stringstream ss;
         ss << index << timestamp << previousHash << nonce;
-        string input = ss.str();
-        return sha256(input);
+        return sha256(ss.str());
     }
 
 
@@ -111,7 +110,6 @@ private:
 
     // Inserta una nueva transaccion
     void insert(Transaction transaction) {
-
         list_data->push_back(transaction);
         minheap_amount->push(transaction);
         maxheap_amount->push(transaction);

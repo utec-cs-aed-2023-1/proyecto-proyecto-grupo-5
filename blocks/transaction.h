@@ -36,7 +36,7 @@ struct Transaction {
 
 // Representación textual de una transacción   
 ostream &operator<<(ostream &os, const Transaction &tx) {
-    os << "(" << tx.client << " , " << tx.date << ", " << tx.amount << ", " << dateToUnix(tx.date) << ")";
+    os << tx.client << "," << tx.date << "," << tx.amount << "," << dateToUnix(tx.date);
     return os;
 }
 

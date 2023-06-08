@@ -100,7 +100,7 @@ void BlockChain::createUser(const string &username, const string &password){
 
 Block*& BlockChain::operator[](unsigned int idx) {
     NodeB* iter = blocks->begin();
-    for (int i=0; i<=idx; ++i) {
+    for (int i=0; i<idx; ++i) {
         iter = iter->next;
     }
     return iter->data;
@@ -170,10 +170,16 @@ void BlockChain::cascade(const string &username, const string &password){
 
 
 void BlockChain::downloadFile(const std::string& path = "./assets/data/datos.txt") {
-    std::ofstream* file = new ofstream(path);
+    std::ofstream file(path);
+    file << "client,place,amount,date" << endl;
+    
     for (int i=0; i < cantblocks; i++) {
-        TxList* tx = usersHash->get_bucket(i)->data.value->getTransactions();
-        // file << tx->nombre << " " << tx->string2 << " " << tx->amount << " " << tx->date << std::endl;
+        TxList* tx = blocks->operator[](i)->getTransactions();
+        TxNode* temp = tx->begin();
+        while (temp != nullptr) {
+            file << temp->data << std::endl;
+            temp = temp->next;
+        }
     }
-    // out.close();
+    file.close();
 }
