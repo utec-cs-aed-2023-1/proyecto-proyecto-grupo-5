@@ -26,12 +26,13 @@ public:
     typedef DoubleList<Entry> HashList;
     typedef NodeList<Entry> EntryNode;
 
-    friend ostream& operator<<(ostream& os, Entry pair) {
+    friend ostream& operator<<(ostream& os, Entry* pair) {
         os << "(" << pair.key << "," << pair.value << ") ";
         return os;
     }
 
 private:
+    Entry** buckets;
     HashList **buckets;
     int capacity;              //tamanio del buckets
     int size = 0;              //cantidad de elementos totales
@@ -39,9 +40,9 @@ private:
 public:
 
     ChainHash(): capacity(capacityDEF) {
-        buckets = new HashList*[capacityDEF];
+        buckets = new Entry*[capacityDEF];
         for (short i=0; i<capacityDEF; ++i) {
-            buckets[i] = new HashList;
+            buckets[i] = nullptr;
         }
     }
 
@@ -53,57 +54,38 @@ public:
     };
     
     ChainHash(int capacity): capacity(capacity) {
-        buckets = new HashList*[capacity];
+        buckets = new Entry*[capacity];
         for (short i=0; i<capacity; ++i) {
-            buckets[i] = new HashList;
+            buckets[i] = nullptr;
         }
 	}
 
     void set(TK key, TV& value){
         size_t index = hashFunction(key);
-        buckets[index]->push_front(Entry(key, value));
+        buckets[index] = new Entry(key, value);
     }
 
     TV& get(TK key){
         size_t index = hashFunction(key);
-        EntryNode* nodetemp = buckets[index]->begin();
-        // cout << "index get " << index << endl;
-        while (nodetemp != nullptr) {
-            // cout << "key: " << nodetemp->data.key << " == " << key << endl;
-            if (nodetemp->data.key == key)  {
-                // cout << "done << " << nodetemp->data.value << endl;
-                return nodetemp->data.value; 
-            }
-            nodetemp = nodetemp->next;
-        }
+        if (!buckets[index] == nullptr)
+            return buckets[index]->value;
         throw std::out_of_range("key unbound in hashtable");
-    };
+    }
 
     void viewHash() {
         for (int i=0; i<capacity; ++i) {
-            EntryNode* nodetemp = buckets[i]->begin();
             cout << "Bucket " << i+1 << " size: " << bucket_size(i) << "\n -- ";
-            while (nodetemp != nullptr) {
-                cout << nodetemp->data << " ";
-
-                nodetemp = nodetemp->next;
-            }
-            cout << endl;
-        }
+            if (!buckets[i] == nullptr)
+                cout << buckets[i] << " ";
+        } cout << endl;
     }
 
     bool search(TK key) {
         size_t index = hashFunction(key);
-        // cout << "index search " << index << endl;
-        EntryNode* nodetemp = buckets[index]->begin();
-        while (nodetemp != nullptr) {
-            if (nodetemp->data.key == key)
-                return true; 
-
-            nodetemp = nodetemp->next;
-        } 
+        if (!buckets[index] == nullptr)
+            return true;
         return false;
-    }
+    };
 
     int bucket_count() const {
         return capacity;
@@ -124,20 +106,16 @@ private:
 
     void rehashing(){
         // Aumentar la capacidad del arreglo original
-        HashList** newbuckets = buckets;
-        delete[] buckets;
-        buckets = new HashList*[capacity*2];
+        capacity *= 2;
+        Entry** newbuckets = new Entry*[capacity];
 
         // Insertar todos los elementos del arreglo original en el nuevo arreglo
-        for (HashList* entry : newbuckets) {
-            EntryNode* temp = entry->begin();
-            while (temp != nullptr) {
-                set(temp.key, temp.value);
-                temp = temp->next;
-            }
+        size_t index;
+        for (short i=0; i<capacity/2; ++i) {
+            index = hashFunction(buckets[i]->key);
+            newbuckets[index] = move(buckets[i]);
         }
-
-        capacity = capacity*2;
+        buckets = newbuckets;
     }
 
     size_t hashFunction(TK key) {
