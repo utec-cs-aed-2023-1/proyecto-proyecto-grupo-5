@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <iostream>
 using namespace std;
 
 const int DIFFICULTY = 4;       // Número de ceros iniciales requeridos en el hash

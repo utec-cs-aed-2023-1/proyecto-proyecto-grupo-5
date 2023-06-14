@@ -1,7 +1,6 @@
 #ifndef BLOCK_COMPONENT_H
 #define BLOCK_COMPONENT_H
 
-#include <iostream>
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -21,9 +20,6 @@ typedef NodeList<Transaction> TxNode;
 
 const CompTx mayorAmount = [](const Transaction& a, const Transaction& b) { return a.amount > b.amount; };
 const CompTx mayorDate = [](const Transaction& a, const Transaction& b) { return dateToUnix(a.date) > dateToUnix(b.date); };
-const ChangeTx changeAmount = [](Transaction& tx, const string& value) { tx.amount = stoi(value); };
-const ChangeTx changePlace = [](Transaction& tx, const string& value) { tx.place = value; };
-const ChangeTx changeDate = [](Transaction& tx, const string& value) { tx.place = value; };
 
 // Definición de la estructura del bloque
 class Block {
