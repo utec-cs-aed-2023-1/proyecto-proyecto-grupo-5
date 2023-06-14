@@ -22,6 +22,10 @@ private:
     std::function<bool(const T&, const T&)> mayor = [](const T& a, const T& b) { return a > b; };
 
 public:
+    Heap(int capacity, Type type = MAX_HEAP): capacity(capacity) {
+        this->array = new T[capacity];
+    }
+
     Heap(
         std::function<bool(const T&, const T&)> mayor, Type type = MAX_HEAP 
     ): capacity(capacityDEF), mayor(mayor) {
@@ -74,8 +78,9 @@ public:
     void resize(int capacity) {
         if (capacity == this->capacity)   return;
 
+        int current_cap = (capacity>this->capacity)? this->capacity :capacity;
         T *new_arr = new T[capacity];
-        for (int i = 0; i < (capacity<this->capacity)? capacity : this->capacity; i++){
+        for (int i = 0; i < current_cap; i++){
             new_arr[i] = array[i];
         }
         delete [] array;
@@ -90,6 +95,29 @@ public:
         resize(elements);
         heapify_down(0);
         return aux;
+    }
+
+    void remove(int index) {
+        if (index >= elements)   return;
+
+        for (int i=index; i>0; --i)
+            swap(array[i-1], array[i]);
+        
+        T _ = pop();
+    }
+
+    void remove(T value) {
+        int index = 0;
+        for (; index < elements; index++) {
+            if (array[index] == value)    break;
+        }
+        remove(index);
+    }
+
+    void update(T old_, T new_) {
+        if (old_ == new_)   return;
+        remove(old_);
+        push(new_);
     }
 
     T top() {
@@ -232,7 +260,7 @@ private:
                 swap(array[Left(i)], array[i]);
                 heapify_down(Left(i));
             }
-            if (!mayor(array[Right(i)], array[i]) && !mayor(array[Right(i)]<=array[Left(i)]) && Right(i) < elements){
+            if (!mayor(array[Right(i)], array[i]) && !mayor(array[Right(i)], array[Left(i)]) && Right(i) < elements){
                 swap(array[Right(i)], array[i]);
                 heapify_down(Right(i));
             }

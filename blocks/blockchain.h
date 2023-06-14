@@ -20,6 +20,7 @@ private:
     // Faltaria el b+tree;
     hashBlock* usersHash = new hashBlock;          // hashtable de par (usuario,bloque)
     int cantblocks =0;                             // cantidad de bloques
+    
 
 public:
  
@@ -30,22 +31,20 @@ public:
 
   void init_blockchain();
 
-  BlockChain(const string &users,const string &transacciones); //Leo
-  void createUser(const string &username, const string &password); //Leo
+  BlockChain(const string &users,const string &transacciones);
+  void createUser(const string &username, const string &password);
   Block*& operator[](unsigned int);
-  bool searchUser(const string &username, const string &password); //Leo
-  void insertTransaction(const string &username, const string &password, const string &place, float amount, const string &date); //Leo
-  bool searchData(const string &username, const string &password, const string &place, float amount, const string &date); //Leo
-  void theTransactions(const std::string &username, const std::string &password); //Noemi
-  void date(const std::string &username, const std::string &password); //Noemi
-  void Amount(const std::string &username, const std::string &password); //Noemi
-  void MaxDate(const std::string &username, const std::string &password); //Noemi
-  void MinDate(const std::string &username, const std::string &password); // Mariel
-  void MaxAmount(const std::string &username, const std::string &password); // Mariel
-  void MinAmount(const std::string &username, const std::string &password); // Mariel
-  void cascade(const string &username, const string &password); // Mariel
-  void downloadFile(const std::string& path); //Mariel
-  
+  bool searchUser(const string &username, const string &password);
+  void insertTransaction(const string &username, const string &password, const string &place, float amount, const string &date);
+  bool searchData(const string &username, const string &password, const string &place, float amount, const string &date);
+  void theTransactions(const std::string &username, const std::string &password);
+  Transaction MaxDate(const std::string &username, const std::string &password);
+  Transaction MinDate(const std::string &username, const std::string &password);
+  Transaction MaxAmount(const std::string &username, const std::string &password);
+  Transaction MinAmount(const std::string &username, const std::string &password);
+  void cascade(const string &username, const string &password);
+  void updateTransaction(int indexBlock, const string &username, const string &password, const string& place, float amount, const string& date);
+  void downloadFile(const std::string& path);
 };
 
 BlockChain::BlockChain(const string &fileUsers, const string &fileTransactions){
@@ -122,51 +121,40 @@ void BlockChain::insertTransaction(const string &username, const string &passwor
     // std::cout << "end\n\n";
 }
 
-/*
-bool BlockChain::searchData(const string &username, const string &password, const string &place, float amount, const string &date){
+Transaction BlockChain::MaxDate(const string &username, const string &password){
     string hash = username + "&&" + password;
-    auto *transaccion= new Transaction(username, place, date,amount);
-    stringstream key;
-    key << *(transaccion);
-    return usersHash.get(hash)->data->data_hash.search(key.str());
-}*/
-
-/*void BlockChain::theTransactions(const string &username, const string &password){
-    string hash = username + "&&" + password;
-    Block::TxList* userTransactions = usersHash->get(hash)->getTransactions();
-    //downloadFile(&userTransactions);
-}*/
-
-void BlockChain::MaxDate(const string &username, const string &password){
-    string hash = username + "&&" + password;
-    Transaction transactions = usersHash->get(hash)->maxDate();
-    //downloadFile(&transactions);
+    Transaction transaction = usersHash->get(hash)->maxDate();
+    return transaction;
 }
 
-void BlockChain::MinDate(const string &username, const string &password){
+Transaction BlockChain::MinDate(const string &username, const string &password){
     string hash = username + "&&" + password;
-    Transaction transactions = usersHash->get(hash)->minDate();
-    //downloadFile(&transactions);
+    Transaction transaction = usersHash->get(hash)->minDate();
+    return transaction;
 }
 
-void BlockChain::MaxAmount(const string &username, const string &password){
+Transaction BlockChain::MaxAmount(const string &username, const string &password){
     string hash = username + "&&" + password;
-    Transaction transactions = usersHash->get(hash)->maxAmount();
-    //downloadFile(&transactions);
+    Transaction transaction = usersHash->get(hash)->maxAmount();
+    return transaction;
 }
 
-void BlockChain::MinAmount(const string &username, const string &password){
+Transaction BlockChain::MinAmount(const string &username, const string &password){
     string hash = username + "&&" + password;
-    Transaction transactions = usersHash->get(hash)->minAmount();
-    //downloadFile(&transactions);
+    Transaction transaction = usersHash->get(hash)->minAmount();
+    return transaction;
 }
 
-/*
-void BlockChain::cascade(const string &username, const string &password){
+void BlockChain::cascade(const string &username, const string &password) {
+    // identifica al hash no valido y procede a minar en cascada
+}
+
+void BlockChain::updateTransaction(int indexBlock, const string &username, const string &password, const string& place, float amount, const string& date){
     string hash = username + "&&" + password;
-    Transaction * transactions = this->usersHash.get(hash)->data;
-    //downloadFile(&transactions);
-}*/
+    Block* tx = usersHash->get(hash);
+    Transaction toChange(username,place, date, amount);
+    tx->updateTx(toChange, place, amount, date);
+}
 
 
 void BlockChain::downloadFile(const std::string& path = "./assets/data/datos.txt") {

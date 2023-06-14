@@ -3,7 +3,6 @@
 #define DOUBLELIST_H
 
 #include <iostream>
-#include <functional>
 #include "list.h"
 #include "node.h"
 
@@ -174,14 +173,23 @@ public:
         return false;
     }
 
-    bool find(T value) {
+    void update(T old_, T new_) {
+        if (old_ == new_)   return;
+
+        if (head->data == old_) {
+            head->data = new_;     return;
+        } 
+        else if (tail->data == old_) {
+            tail->data = new_;     return;
+        }
+
         NodeList<T>* temp = head;
         while (temp != nullptr) {
-            if (temp->data == value)
-                return true;
+            if (temp->data == old_) {
+                temp->data = new_;  return;
+            }
             temp = temp->next;
         }
-        return false;
     }
 
     T &operator[](int pos) {
@@ -220,10 +228,6 @@ public:
             }
         }
     }*/
-
-    std::string name() {
-        return "DoubleList";
-    }
 
     NodeList<T>*& begin() {
         return head;

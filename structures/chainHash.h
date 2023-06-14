@@ -23,9 +23,6 @@ private:
     };
 
 public:
-    typedef DoubleList<Entry> HashList;
-    typedef NodeList<Entry> EntryNode;
-
     friend ostream& operator<<(ostream& os, Entry* pair) {
         os << "(" << pair.key << "," << pair.value << ") ";
         return os;
@@ -33,7 +30,6 @@ public:
 
 private:
     Entry** buckets;
-    HashList **buckets;
     int capacity;              //tamanio del buckets
     int size = 0;              //cantidad de elementos totales
 
@@ -67,7 +63,7 @@ public:
 
     TV& get(TK key){
         size_t index = hashFunction(key);
-        if (!buckets[index] == nullptr)
+        if (buckets[index] != nullptr)
             return buckets[index]->value;
         throw std::out_of_range("key unbound in hashtable");
     }
@@ -82,7 +78,7 @@ public:
 
     bool search(TK key) {
         size_t index = hashFunction(key);
-        if (!buckets[index] == nullptr)
+        if (buckets[index] != nullptr)
             return true;
         return false;
     };
@@ -94,10 +90,6 @@ public:
     int bucket_size(unsigned int pos) const {
         return buckets[pos]->size();
     };
-
-    EntryNode* get_bucket(unsigned int pos) {
-        return buckets[pos]->begin();
-    }
 
 private:
     double fillFactor() const {
@@ -116,6 +108,7 @@ private:
             newbuckets[index] = move(buckets[i]);
         }
         buckets = newbuckets;
+        delete newbuckets;
     }
 
     size_t hashFunction(TK key) {

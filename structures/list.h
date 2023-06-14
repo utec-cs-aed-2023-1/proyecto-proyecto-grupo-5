@@ -41,7 +41,7 @@ public:
 
     virtual bool search(T) = 0;
 
-    virtual bool find(T) = 0;
+    virtual void update(T, T) = 0;
 
     // Sobrecarga del operador de indexación para acceder a los elementos de la lista por índice
     virtual T& operator[](int) = 0;
@@ -64,7 +64,5 @@ public:
     // Invierte el orden de los elementos en la lista
     // virtual void reverse() = 0;
 
-    // Devuelve el nombre de la implementación concreta de la lista
-    virtual std::string name() = 0;
 };
 #endif
