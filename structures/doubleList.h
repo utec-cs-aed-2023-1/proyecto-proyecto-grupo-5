@@ -50,8 +50,8 @@ public:
     T back() {
       if (tail == nullptr) {
             throw std::out_of_range("List is empty");
-        }
-        return tail->data;
+      }
+      return tail->data;
     }
 
     void push_front(T data) {

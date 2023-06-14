@@ -30,7 +30,7 @@ public:
         std::function<bool(const T&, const T&)> mayor, Type type = MAX_HEAP 
     ): capacity(capacityDEF), mayor(mayor) {
         this->array = new T[capacityDEF];
-    };
+    }
 
     Heap(
         T *array, int elem, 

@@ -45,7 +45,7 @@ public:
     ~ChainHash() {
         for (short i=0; i<capacity; ++i) {
             delete buckets[i];
-        };
+        }
         delete[] buckets;
     };
     
@@ -54,9 +54,11 @@ public:
         for (short i=0; i<capacity; ++i) {
             buckets[i] = nullptr;
         }
-	}
+    }
 
     void set(TK key, TV& value){
+        if (fillFactor() >= maxFillFactor) rehashing();
+
         size_t index = hashFunction(key);
         buckets[index] = new Entry(key, value);
     }
@@ -81,7 +83,7 @@ public:
         if (buckets[index] != nullptr)
             return true;
         return false;
-    };
+    }
 
     int bucket_count() const {
         return capacity;

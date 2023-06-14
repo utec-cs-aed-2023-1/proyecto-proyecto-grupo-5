@@ -15,7 +15,6 @@ typedef NodeList<Block*> NodeB;
 class BlockChain {
 private:
     LBlocks* blocks = new LBlocks;                  // lista de bloques enlazados
-    // Faltaria el b+tree;
     hashBlock* usersHash = new hashBlock;          // hashtable de par (usuario,bloque)
     int cantblocks =0;                             // cantidad de bloques
     

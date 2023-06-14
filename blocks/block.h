@@ -12,7 +12,6 @@
 using namespace std;
 
 typedef std::function<bool(const Transaction&, const Transaction&)> CompTx;
-typedef std::function<void(Transaction&, const string&)> ChangeTx;
 
 typedef DoubleList<Transaction> TxList;
 typedef Heap<Transaction> TxHeap;
@@ -54,7 +53,7 @@ private:
         delete list_data;
         delete minheap_amount, minheap_date;
         delete maxheap_amount, maxheap_date;
-    };
+    }
 
 
     // constructor copia a partir de otro bloque
@@ -76,6 +75,7 @@ private:
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
             ss << nodetemp->data;
+            nodetemp = nodetemp->next;
         }
 
         return sha256(ss.str());
@@ -99,10 +99,11 @@ private:
     void printBlock(){
         std::cout << "------------------------------" << endl;
         std::cout << "------------------------------" << endl;
-        std::cout << "Block Index N°: " << index << endl;
+        std::cout << "Block Index N: " << index << endl;
         std::cout << "-- Created at: " << unixToDate(timestamp) << endl;
         std::cout << "-- Previous Hash: " << previousHash << endl;
         std::cout << "-- Hash: " << hash << endl;
+        std::cout << "-- Nonce: " << nonce << endl;
         std::cout << "-- Transactions :" << endl;
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
@@ -129,9 +130,10 @@ private:
         mineBlock();
     }
 
+
     // actualiza una transaccion espacífica
     void updateTx(Transaction changed, string place, int amount, string date) {
-        Transaction newer(changed.client, place, changed.date, amount);
+        Transaction newer(changed.client, place, date, amount);
         minheap_amount->update(changed, newer);
         maxheap_amount->update(changed, newer);
         minheap_date->update(changed, newer);
@@ -140,6 +142,7 @@ private:
         // rehashea
         this->hash = calculateHash();
     }
+
 
     // remover una transaccion
     void removeTransaction(int indexTx) {
