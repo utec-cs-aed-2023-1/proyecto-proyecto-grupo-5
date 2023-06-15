@@ -154,7 +154,7 @@ void BlockChain::updateTransaction(int indexBlock, const string &username, const
 }
 
 
-void BlockChain::downloadFile(const std::string& path = "./assets/data/datos.txt") {
+void BlockChain::downloadFile(const std::string& path = "./assets/data/500DATA.csv") {
     std::ofstream file(path);
     file << "client,place,amount,date" << endl;
     
