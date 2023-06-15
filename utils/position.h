@@ -3,8 +3,9 @@
 
 struct Position {
     float x = 0, y = 0;
-    Position() = default;
-    Position(float x_, float y_): x(x_), y(y_) {}
+    void movePos(int x, int y) { 
+        this->x = y;    this->y = y;
+    }
 };
 
 

@@ -1,56 +1,50 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "message.h"
 #include <string>
 using namespace sf;
 
+const std::string HOLY_TITLE = "Our BlockChain05!";
+const std::string LIST_BLOCK = "Lista de bloques : ";
+const unsigned int N = 2;
+RenderWindow window(VideoMode(1500, 700), "BlockChain05");
+
 class AppGui {
 private:
-    RenderWindow* window = new RenderWindow(VideoMode(500, 500), "BlockChain05");
+    std::string title = HOLY_TITLE;
+    std::string subtitle = LIST_BLOCK;
+    Message* phrases[N] = {
+        new Message(HOLY_TITLE, window.getSize().x /2, 60, Color::White),
+        new Message(LIST_BLOCK, 12*LIST_BLOCK.size(), 140, Color::Blue)
+    };
 
 public:
     AppGui() = default;
-    ~AppGui() { delete window; }
+    ~AppGui() {
+        for (short i=0; i<(int)N; ++i)
+            delete phrases[i];
+    }
+
+    void set_username() {
+        return;
+    }
 
     void init_visualize_app() {
-        Font font;
-        if (!font.loadFromFile("./assets/arial.ttf"))
-            throw "Don't load font...";
-
-        Text text;
-        text.setFont(font);
-        text.setString("GUI all right");
-        text.setCharacterSize(40);
-        text.setFillColor(Color::White);
-        text.setStyle(Text::Bold);
-        text.setPosition(window->getSize().x / 2 - text.getLocalBounds().width / 2,
-                         window->getSize().y / 2 - text.getLocalBounds().height / 2);
-
         Clock clock;
-        bool visible = true;
 
-        while (window->isOpen()) {
+        while (window.isOpen()) {
             Event event;
-            while (window->pollEvent(event))
+            while (window.pollEvent(event))
             {
                 if (event.type == Event::Closed)
-                    window->close();
+                    window.close();
             }
 
-            Time elapsed = clock.getElapsedTime();
-            if (elapsed.asSeconds() >= 0.1)
-            {
-                visible = !visible;
-                clock.restart();
+            window.clear();
+            for (auto& phr: phrases) {
+                window.draw(phr->getText());
             }
-
-            if (visible)
-                text.setFillColor(Color::White);
-            else
-                text.setFillColor(Color::Yellow);
-
-            window->clear();
-            window->draw(text);
-            window->display();
+            window.display();
         }
     }
 };

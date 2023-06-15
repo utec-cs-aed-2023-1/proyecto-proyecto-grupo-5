@@ -33,8 +33,6 @@ public:
   Block*& operator[](unsigned int);
   bool searchUser(const string &username, const string &password);
   void insertTransaction(const string &username, const string &password, const string &place, float amount, const string &date);
-  bool searchData(const string &username, const string &password, const string &place, float amount, const string &date);
-  void theTransactions(const std::string &username, const std::string &password);
   Transaction MaxDate(const std::string &username, const std::string &password);
   Transaction MinDate(const std::string &username, const std::string &password);
   Transaction MaxAmount(const std::string &username, const std::string &password);
@@ -67,12 +65,6 @@ BlockChain::BlockChain(const string &fileUsers, const string &fileTransactions){
 
 
 void BlockChain::init_blockchain() {
-    // recrea la interfaz en consola del blockchain
-    createUser("Ana", "sedest");
-    insertTransaction("Ana", "sedest", "Lima", 23, "2023-5-1");
-    insertTransaction("Ana", "sedest", "Surco", 9, "2023-2-9");
-    createUser("Sebas", "caigua");
-    insertTransaction("Sebas", "caigua", "Lima", 12, "2022-12-12");
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         iter->data->printBlock();
@@ -156,7 +148,7 @@ void BlockChain::updateTransaction(int indexBlock, const string &username, const
 
 void BlockChain::downloadFile(const std::string& path = "./assets/data/datos.txt") {
     std::ofstream file(path);
-    file << "client,place,amount,date" << endl;
+    file << "client place amount date" << endl;
     
     for (int i=0; i < cantblocks; i++) {
         TxList* tx = blocks->operator[](i)->getTransactions();
