@@ -3,7 +3,7 @@
 
 #include <sstream>
 #include "doubleList.h"
-#include "../utils/constants.h"
+#include "constants.h"
 #include <cmath>
 using namespace std;
 
@@ -35,9 +35,9 @@ private:
 
 public:
 
-    ChainHash(): capacity(capacityDEF) {
-        buckets = new Entry*[capacityDEF];
-        for (short i=0; i<capacityDEF; ++i) {
+    ChainHash(): capacity(capacityHashDEF) {
+        buckets = new Entry*[capacityHashDEF];
+        for (short i=0; i<capacityHashDEF; ++i) {
             buckets[i] = nullptr;
         }
     }

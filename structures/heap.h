@@ -4,11 +4,10 @@
 #include <iostream>
 #include <functional>
 #include <stdexcept>
-#include "../utils/constants.h"
+#include "constants.h"
 
 using namespace std;
 
-// template <typename T, enum Type>
 template <typename T>
 class Heap {
 public:
@@ -28,8 +27,8 @@ public:
 
     Heap(
         std::function<bool(const T&, const T&)> mayor, Type type = MAX_HEAP 
-    ): capacity(capacityDEF), mayor(mayor) {
-        this->array = new T[capacityDEF];
+    ): capacity(capacityHeapDEF), mayor(mayor) {
+        this->array = new T[capacityHeapDEF];
     }
 
     Heap(

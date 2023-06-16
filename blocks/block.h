@@ -1,38 +1,41 @@
-#ifndef BLOCK_COMPONENT_H
-#define BLOCK_COMPONENT_H
+#ifndef BLOCK_H
+#define BLOCK_H
 
 #include <ctime>
 #include <sstream>
 #include <string>
 #include "../structures/heap.h"
+#include "../structures/avl.h"
 #include "../structures/doubleList.h"
 #include "../utils/SHA256.h"
 #include "transaction.h"
 
 using namespace std;
 
-typedef std::function<bool(const Transaction&, const Transaction&)> CompTx;
-
 typedef DoubleList<Transaction> TxList;
-typedef Heap<Transaction> TxHeap;
+typedef AVLTree<Transaction> TxAVL;
 typedef NodeList<Transaction> TxNode;
 
-const CompTx mayorAmount = [](const Transaction& a, const Transaction& b) { return a.amount > b.amount; };
-const CompTx mayorDate = [](const Transaction& a, const Transaction& b) { return dateToUnix(a.date) > dateToUnix(b.date); };
+typedef std::function<bool(const Transaction&, const Transaction&)> CompTx;
+
+const CompTx mayor_amount = [](const Transaction& a, const Transaction& b) { return a.amount < b.amount; };
+const CompTx minor_amount = [](const Transaction& a, const Transaction& b) { return a.amount > b.amount; };
+
+// compare las fechas en formato Unix de tipo int
+const CompTx mayor_date = [](const Transaction& a, const Transaction& b) { return dateToUnix(a.date) < dateToUnix(b.date); };
+const CompTx minor_date = [](const Transaction& a, const Transaction& b) { return dateToUnix(a.date) > dateToUnix(a.date); };
+
 
 // Definición de la estructura del bloque
 class Block {
 private:
     int index;                          // Índice del bloque en la cadena
     string timestamp;              // Marca de tiempo en la que se crea el bloque
+    int cantTransactions = 0;           // Cantidad de transacciones
     
     TxList* list_data = new TxList;
-    TxHeap* minheap_amount = new TxHeap(mayorAmount, TxHeap::MIN_HEAP);
-    
-    TxHeap* maxheap_amount = new TxHeap(mayorAmount);
-    TxHeap* minheap_date = new TxHeap(mayorDate, TxHeap::MIN_HEAP); 
-    
-    TxHeap* maxheap_date = new TxHeap(mayorDate);
+    TxAVL* tree_amount = new TxAVL(minor_amount, mayor_amount);
+    TxAVL* tree_date = new TxAVL(minor_date, mayor_date);
     
     string previousHash;           // Hash del bloque anterior en la cadena
     string hash;                   // Hash del bloque actual
@@ -51,8 +54,7 @@ private:
 
     ~Block() {
         delete list_data;
-        delete minheap_amount, minheap_date;
-        delete maxheap_amount, maxheap_date;
+        delete tree_amount, tree_date;
     }
 
 
@@ -94,16 +96,16 @@ private:
         // std::cout << "Block mined: " << hash << endl;
     }
 
+    int get_cantTx() { return cantTransactions; }
 
     // Imprimer el bloque con la información de las transacciones en consola
     void printBlock(){
-        std::cout << "------------------------------" << endl;
-        std::cout << "------------------------------" << endl;
-        std::cout << "Block Index N: " << index << endl;
+        std::cout << "┌----------------------------┐" << endl;
+        std::cout << " ---------------------------- " << endl;
+        std::cout << "Block Index N: " << index << " ----- Nonce: " << nonce << endl;;
         std::cout << "-- Created at: " << unixToDate(timestamp) << endl;
         std::cout << "-- Previous Hash: " << previousHash << endl;
         std::cout << "-- Hash: " << hash << endl;
-        std::cout << "-- Nonce: " << nonce << endl;
         std::cout << "-- Transactions :" << endl;
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
@@ -113,8 +115,8 @@ private:
             nodetemp = nodetemp->next;
         }
 
-        std::cout << "------------------------------" << endl;
-        std::cout << "------------------------------" << endl;
+        std::cout << " ---------------------------- " << endl;
+        std::cout << "└----------------------------┘" << endl;
         delete nodetemp;
     }
 
@@ -122,22 +124,19 @@ private:
     // Inserta una nueva transaccion
     void insert(Transaction transaction) {
         list_data->push_back(transaction);
-        minheap_amount->push(transaction);
-        maxheap_amount->push(transaction);
-        minheap_date->push(transaction);
-        maxheap_date->push(transaction);
+        tree_amount->insert(transaction);
+        tree_date->insert(transaction);
         this->hash = calculateHash();
         mineBlock();
+        ++cantTransactions;
     }
 
 
     // actualiza una transaccion espacífica
     void updateTx(Transaction changed, string place, int amount, string date) {
         Transaction newer(changed.client, place, date, amount);
-        minheap_amount->update(changed, newer);
-        maxheap_amount->update(changed, newer);
-        minheap_date->update(changed, newer);
-        minheap_date->update(changed, newer);
+        tree_amount->update(changed, newer);
+        tree_date->update(changed, newer);
         list_data->update(changed, newer);
         // rehashea
         this->hash = calculateHash();
@@ -148,12 +147,11 @@ private:
     void removeTransaction(int indexTx) {
         Transaction transaction = list_data->operator[](indexTx);
         list_data->remove(indexTx);
-        minheap_amount->remove(transaction);
-        maxheap_amount->remove(transaction);
-        minheap_date->remove(transaction);
-        minheap_date->remove(transaction);
+        tree_amount->remove(transaction);
+        tree_date->remove(transaction);
         // rehashea
         this->hash = calculateHash();
+        --cantTransactions;
     }
 
     // devuelve el hashcode en lectura
@@ -173,22 +171,22 @@ private:
 
     // -- La transaccion con mayor monto
     Transaction maxAmount() {
-        return maxheap_amount->top();
+        return tree_amount->maxValue();
     }
 
     // -- La transaccion con menor monto
     Transaction minAmount() {
-        return minheap_amount->top();
+        return tree_amount->minValue();
     }
 
     // -- La transaccion con la fecha mas reciente
     Transaction maxDate() {
-        return maxheap_date->top();
+        return tree_date->maxValue();
     }
 
     // -- La transaccion con la fecha mas antigua
     Transaction minDate() {
-        return minheap_date->top();
+        return tree_date->minValue();
     }
 
     TxList* rangeDate(string date1, string date2); 
@@ -196,6 +194,5 @@ private:
     TxList* rangeAmount(float amount1, float amount2); 
     
 };
-
 
 #endif // BLOCK_COMPONENT_H

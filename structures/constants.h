@@ -10,6 +10,7 @@ const string HashGenesis(64, '0');
 const int maxColision = 3;
 const float maxFillFactor = 0.5;
 const unsigned int PRIMECONST = 3;
-const int capacityDEF = 10;
+const int capacityHeapDEF = 8;
+const int capacityHashDEF = 10;
 
 #endif

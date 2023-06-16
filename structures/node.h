@@ -120,4 +120,32 @@ struct NodeBtree {
 
 };
 
+template <typename T>
+struct NodeBT {
+
+    T data; // El valor del nodo
+    NodeBT* left; // Puntero al hijo izquierdo
+    NodeBT* right; // Puntero al hijo derecho
+
+    // Constructor por defecto
+    NodeBT() : left(nullptr), right(nullptr) {}
+
+    // Constructor con un valor dado
+    NodeBT(T value) : data(value), left(nullptr), right(nullptr) {}
+
+
+    // Función que elimina todos los nodos a partir del actual
+    void KillSelf() {
+        // Si el hijo izquierdo no es nulo, llamar recursivamente a KillSelf en el hijo izquierdo
+        if (left != nullptr)
+            left->KillSelf();
+        // Si el hijo derecho no es nulo, llamar recursivamente a KillSelf en el hijo derecho
+        if (right != nullptr)
+            right->KillSelf();
+
+        // Eliminar el nodo actual
+        delete this;
+    }
+};
+
 #endif
