@@ -4,18 +4,16 @@
 #include <string>
 using namespace sf;
 
-const std::string HOLY_TITLE = "Our BlockChain05!";
-const std::string LIST_BLOCK = "Lista de bloques : ";
 const unsigned int N = 2;
-RenderWindow window(VideoMode(1500, 700), "BlockChain05");
+RenderWindow window(VideoMode(SIZE_X, SIZE_Y), "BlockChain05");
 
 class AppGui {
 private:
-    std::string title = HOLY_TITLE;
+    std::string title = "Our BlockChain05!";
     std::string subtitle = LIST_BLOCK;
     Message* phrases[N] = {
-        new Message(HOLY_TITLE, window.getSize().x /2, 60, Color::White),
-        new Message(LIST_BLOCK, 12*LIST_BLOCK.size(), 140, Color::Blue)
+        new Message("Our BlockChain05!", SIZE_X/2, 60, Color::White),
+        new Message("Lista de bloques : ", 12*LIST_BLOCK.size(), 140, Color::Blue)
     };
 
 public:

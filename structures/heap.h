@@ -2,7 +2,6 @@
 #define HEAP_H
 
 #include <iostream>
-#include <functional>
 #include <stdexcept>
 #include "constants.h"
 

@@ -1,6 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 #include <sstream>
+#include <functional>
 
 template<typename T>
 struct NodeList {

@@ -97,9 +97,9 @@ bool AVLTree<T>::find(NodeBT<T> *node, T value)
 {
     if (node == nullptr)
         return false;
-    else if (value < node->data)
+    else if (minor(value, node->data))
         return find(node->left, value);
-    else if (value > node->data)
+    else if (mayor(value, node->data))
         return find(node->right, value);
     else
         return true;
@@ -163,7 +163,7 @@ void AVLTree<T>::insert(NodeBT<T> *&node, T value)
 {
     if (node == nullptr)
         node = new NodeBT<T>(value);
-    else if (value < node->data)
+    else if (minor(value, node->data))
         insert(node->left, value);
     else
         insert(node->right, value);    
@@ -234,9 +234,9 @@ template <typename T>
 void AVLTree<T>::remove(NodeBT<T> *&node, T value){
     if (node == nullptr)
         return;
-    else if (value < node->data)
+    else if (minor(value, node->data))
         remove(node->left, value);
-    else if (value > node->data)
+    else if (mayor(value, node->data))
         remove(node->right, value);
     else {
         if (node->left == nullptr && node->right == nullptr) {
