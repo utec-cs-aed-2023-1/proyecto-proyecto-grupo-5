@@ -54,7 +54,8 @@ private:
 
     ~Block() {
         delete list_data;
-        delete tree_amount, tree_date;
+        delete tree_amount;
+        delete tree_date;
     }
 
 

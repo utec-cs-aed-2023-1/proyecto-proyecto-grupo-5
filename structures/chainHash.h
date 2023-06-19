@@ -105,12 +105,11 @@ private:
 
         // Insertar todos los elementos del arreglo original en el nuevo arreglo
         size_t index;
-        for (short i=0; i<capacity/2; ++i) {
+        for (short i=0; i<(int)capacity/2; ++i) {
             index = hashFunction(buckets[i]->key);
             newbuckets[index] = move(buckets[i]);
         }
         buckets = newbuckets;
-        delete newbuckets;
     }
 
     size_t hashFunction(TK key) {
@@ -119,7 +118,7 @@ private:
         int sum = 0;
 
         // algoritmo Rolling polynomial
-        for (int i = 0; i < strkey.size(); i++) {
+        for (int i = 0; i < (int) strkey.size(); i++) {
             int res = (int)strkey[i] * (int)pow(PRIMECONST, i);
             sum += res % capacity;
         }

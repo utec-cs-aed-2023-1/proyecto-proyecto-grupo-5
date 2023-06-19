@@ -2,6 +2,7 @@
 #define AVL_H
 #include "node.h"
 #include <iostream>
+#include <functional>
 
 using namespace std;
 

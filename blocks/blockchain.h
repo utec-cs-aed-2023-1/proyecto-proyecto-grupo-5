@@ -23,7 +23,8 @@ public:
   BlockChain() = default;
   int get_cantBlocks() { return cantblocks; }
   ~BlockChain() {
-      delete blocks, usersHash;
+      delete blocks;
+      delete usersHash;
   };
 
   void init_blockchain();
@@ -89,7 +90,7 @@ void BlockChain::crearUsuario(const string &nombreUsuario){
 
 Block*& BlockChain::operator[](unsigned int idx) {
     NodeB* iter = blocks->begin();
-    for (int i=0; i<idx; ++i) {
+    for (int i=0; i<(int) idx; ++i) {
         iter = iter->next;
     }
     return iter->data;

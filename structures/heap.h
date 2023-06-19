@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 #include "constants.h"
 
 using namespace std;

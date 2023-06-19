@@ -1,7 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
 #include <sstream>
-#include <functional>
 
 template<typename T>
 struct NodeList {
@@ -127,6 +126,7 @@ struct NodeBT {
     T data; // El valor del nodo
     NodeBT* left; // Puntero al hijo izquierdo
     NodeBT* right; // Puntero al hijo derecho
+    int height;
 
     // Constructor por defecto
     NodeBT() : left(nullptr), right(nullptr) {}
@@ -136,13 +136,13 @@ struct NodeBT {
 
 
     // Función que elimina todos los nodos a partir del actual
-    void KillSelf() {
+    void killSelf() {
         // Si el hijo izquierdo no es nulo, llamar recursivamente a KillSelf en el hijo izquierdo
         if (left != nullptr)
-            left->KillSelf();
+            left->killSelf();
         // Si el hijo derecho no es nulo, llamar recursivamente a KillSelf en el hijo derecho
         if (right != nullptr)
-            right->KillSelf();
+            right->killSelf();
 
         // Eliminar el nodo actual
         delete this;

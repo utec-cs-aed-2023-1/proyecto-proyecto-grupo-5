@@ -38,7 +38,7 @@ public:
         return *this;
     }
 
-    ~DoubleList() {  delete head, tail; };
+    ~DoubleList() {  delete head; delete tail; };
 
     T front() {
        if (head == nullptr) {

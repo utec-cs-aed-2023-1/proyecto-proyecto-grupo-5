@@ -171,7 +171,7 @@ std::string sha256(const std::string& input)
 
     char buf[2*Sha256Hash::PADD_SIZE+1];
     buf[2*Sha256Hash::PADD_SIZE] = 0;
-    for (int i = 0; i < Sha256Hash::PADD_SIZE; i++) { sprintf(buf+i*2, "%02x", digest[i]); }
+    for (int i = 0; i < (int) Sha256Hash::PADD_SIZE; i++) { sprintf(buf+i*2, "%02x", digest[i]); }
     return std::string(buf);
 }
 

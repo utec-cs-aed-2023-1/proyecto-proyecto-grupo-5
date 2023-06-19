@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "message.h"
+#include "button.h"
+#include "../blocks/blockchain.h"
 #include <string>
 using namespace sf;
 
@@ -10,17 +11,22 @@ RenderWindow window(VideoMode(SIZE_X, SIZE_Y), "BlockChain05");
 class AppGui {
 private:
     std::string title = "Our BlockChain05!";
-    std::string subtitle = LIST_BLOCK;
-    Message* phrases[N] = {
-        new Message("Our BlockChain05!", SIZE_X/2, 60, Color::White),
-        new Message("Lista de bloques : ", 12*LIST_BLOCK.size(), 140, Color::Blue)
-    };
+    BlockChain* blcokchain;
 
 public:
-    AppGui() = default;
+    AppGui()  {
+        blcokchain = new BlockChain; 
+        sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+        window.setPosition(Vector2<int>(desktop.width / 2 - window.getSize().x / 2, 
+                                        desktop.height / 2 - window.getSize().y / 2));
+    };
     ~AppGui() {
-        for (short i=0; i<(int)N; ++i)
-            delete phrases[i];
+        // for (short i=0; i<(int)N; ++i)
+        //     delete phrases[i];
+    }
+
+    void insertFile() {
+
     }
 
     void set_username() {
@@ -38,10 +44,8 @@ public:
                     window.close();
             }
 
-            window.clear();
-            for (auto& phr: phrases) {
-                window.draw(phr->getText());
-            }
+            InstanceBox* m1 = new InstanceBox("Hola", 30, 30, 30);
+            m1->draw(window);
             window.display();
         }
     }

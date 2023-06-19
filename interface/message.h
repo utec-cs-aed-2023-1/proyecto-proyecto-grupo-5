@@ -33,6 +33,18 @@ public:
         sfml_text.setFillColor(color);
     }
 
+    void pop_char() {
+        this->message.pop_back();
+        sfml_text.setString(message);
+    }
+
+    void push_char(const char ch) {
+        this->message += ch; 
+        sfml_text.setString(message);
+    }
+
+    bool is_empty() { return message.empty(); }
+
     Text getText() { return sfml_text; }
 
     Color getColor() { return sfml_text.getFillColor(); }
