@@ -48,6 +48,10 @@ public:
     Text getText() { return sfml_text; }
 
     Color getColor() { return sfml_text.getFillColor(); }
+
+    void setPosition(float pos_x, float pos_y) {
+        sfml_text.setPosition(pos_x, pos_y);
+    } 
 };
 
 

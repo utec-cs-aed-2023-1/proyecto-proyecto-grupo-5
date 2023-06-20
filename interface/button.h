@@ -2,12 +2,16 @@
 #define BUTTON_GUI_H
 
 #include <SFML/Graphics.hpp>
+
 #include "position.h"
 #include "message.h"
 
 using namespace sf;
 using namespace std;
 
+const int FORM_TEXT_SIZE = 10;
+const int FEAT_BUTTON_SIZE = 25;
+const int BUTTON_SIZE = 20;
 
 class InstanceBox {
 protected:
@@ -25,7 +29,11 @@ public:
         position(pos_x, pos_y), 
         message(new Message(text, textSize)),
         rectangle(new RectangleShape(Vector2f(textSize*text.size(), textSize)))
-    {}
+    {
+        rectangle->setFillColor(sf::Color(0, 0, 0, 128));
+        rectangle->setPosition(pos_x, pos_y);
+        message->setPosition(pos_x, pos_y);
+    }
 
     void moveFrame(int pos_x, int pos_y) {
         position.movePos(pos_x, pos_y);
@@ -46,11 +54,12 @@ public:
 
 class Input: public InstanceBox {
 public:
-    Input(string text, float pos_x, float pos_y, int TextSize = 30): InstanceBox(text, pos_x, pos_y, TextSize) {
-        rectangle->setSize(Vector2f(TextSize*text.size() + 15, TextSize + 15));
-        rectangle->setFillColor(Color::White);
-        rectangle->setOutlineThickness(2.f);
-        rectangle->setOutlineColor(sf::Color::Black);
+    Input(string text, float pos_x, float pos_y): 
+        InstanceBox(text, pos_x, pos_y, FORM_TEXT_SIZE)
+    {
+        rectangle->setSize(Vector2f(FORM_TEXT_SIZE*text.size(), FORM_TEXT_SIZE + 10));
+        rectangle->setOutlineThickness(3.f);
+        rectangle->setOutlineColor(sf::Color::White);
     }
 
     void updateInput(sf::RenderWindow& window, Event event) {
@@ -74,9 +83,14 @@ public:
 
 class Button: public InstanceBox {
 public:
-    Button(string text, float pos_x, float pos_y, sf::Color color, int TextSize = 30): InstanceBox(text, pos_x, pos_y, TextSize) {
-        rectangle->setSize(Vector2f(TextSize*text.size() + 20, TextSize + 20));
-        rectangle->setFillColor(color);
+    Button(string text, float pos_x, float pos_y, sf::Color linecolor, 
+           sf::Color bgcolor = Color(0, 0, 0, 128), int textSize = BUTTON_SIZE
+    ): InstanceBox(text, pos_x, pos_y, textSize) 
+    {
+        rectangle->setSize(Vector2f(textSize*text.size(), textSize + textSize*2/3));
+        rectangle->setFillColor(bgcolor);
+        rectangle->setOutlineThickness(3.f);
+        rectangle->setOutlineColor(linecolor);
         centerMessage(pos_x, pos_y);
     }
 
@@ -87,10 +101,12 @@ public:
     }
 
     void centerMessage(float pos_x, float pos_y) {
+        // obtengo el tamaño de la palabra renderizada
         float textWidth = message->getText().getGlobalBounds().width;
+        // actualizo la posición del redtangulo para que el message se ve centrado
         rectangle->setPosition(
-            message->getText().getPosition().x - textWidth / 2,
-            message->getText().getPosition().y - message->getText().getCharacterSize() / 2
+            rectangle->getPosition().x - textWidth / 2,                               // resta el tamaño del caracter de la palabra / 2
+            rectangle->getPosition().y - message->getText().getCharacterSize() / 2    // resta el tamaño de palabra / 2
         );
     }
 };
@@ -98,8 +114,11 @@ public:
 
 class FeatureButton: public Button {
 public:
-    FeatureButton(string text, float pos_x, float pos_y, sf::Color color, int TextSize = 30): Button(text, pos_x, pos_y, color, TextSize + 5) {
-        rectangle->setSize(Vector2f(TextSize*text.size() + 20, TextSize + 20));
+    FeatureButton(string text, float pos_x, float pos_y, 
+                  sf::Color linecolor, sf::Color bgcolor
+    ): Button(text, pos_x, pos_y, linecolor, bgcolor, FEAT_BUTTON_SIZE)
+    {
+        rectangle->setSize(Vector2f(FEAT_BUTTON_SIZE*text.size() + 20, FEAT_BUTTON_SIZE + FEAT_BUTTON_SIZE*5/6));
         centerMessage(pos_x, pos_y);
     }
 };

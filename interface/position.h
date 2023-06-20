@@ -1,8 +1,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-const unsigned int SIZE_X = 1500;
-const unsigned int SIZE_Y = 700;
+const unsigned int SIZE_X = 1920;
+const unsigned int SIZE_Y = 1060;
 
 struct Position {
     float x = 0, y = 0;
