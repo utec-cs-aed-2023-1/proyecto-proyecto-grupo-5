@@ -2,7 +2,6 @@
 #define TEXT_GUI_H
 
 #include <SFML/Graphics.hpp>
-#include "position.h"
 #include <iostream>
 using namespace sf;
 
@@ -13,15 +12,17 @@ class Message {
 
 public:
     Message() = default;
-    Message(std::string text_, int textSize,  sf::Color color = Color::White): message(text_) {
+    Message(std::string text_, float pos_x, float pos_y, int ChrSize, sf::Color color): message(text_) {
         if (!font.loadFromFile("assets/arial.ttf")) {
             throw "not correctly loaded font: ";
         }
         sfml_text.setFont(font);
         sfml_text.setFillColor(color);
         sfml_text.setString(text_);
-        sfml_text.setCharacterSize(textSize);
+        sfml_text.setCharacterSize(ChrSize);
         sfml_text.setStyle(Text::Bold);
+        sfml_text.setPosition(pos_x + sfml_text.getLocalBounds().width - 40, 
+                              pos_y + sfml_text.getLocalBounds().height);
     }
 
     void setMessage(std::string message) {
@@ -31,6 +32,12 @@ public:
 
     void changeColor(sf::Color color) {
         sfml_text.setFillColor(color);
+    }
+
+    void centering(float pos_x, float pos_y, Vector2f dimensions) {
+        sf::FloatRect textBounds = sfml_text.getLocalBounds();
+        sfml_text.setOrigin(textBounds.left + textBounds.width / 2, textBounds.top + textBounds.height / 2);
+        sfml_text.setPosition(pos_x + dimensions.x / 2, pos_y + dimensions.y / 2);
     }
 
     void pop_char() {
@@ -46,8 +53,6 @@ public:
     bool is_empty() { return message.empty(); }
 
     Text getText() { return sfml_text; }
-
-    Color getColor() { return sfml_text.getFillColor(); }
 
     void setPosition(float pos_x, float pos_y) {
         sfml_text.setPosition(pos_x, pos_y);
