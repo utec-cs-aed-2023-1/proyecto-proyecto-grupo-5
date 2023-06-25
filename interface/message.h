@@ -21,8 +21,9 @@ public:
         sfml_text.setString(text_);
         sfml_text.setCharacterSize(ChrSize);
         sfml_text.setStyle(Text::Bold);
-        sfml_text.setPosition(pos_x + sfml_text.getLocalBounds().width - 40, 
-                              pos_y + sfml_text.getLocalBounds().height);
+        std::cout << "pos message " << pos_x << " " << pos_y << std::endl;
+        sfml_text.setPosition(pos_x - sfml_text.getLocalBounds().width/2, 
+                              pos_y + sfml_text.getLocalBounds().height/2);
     }
 
     void setMessage(std::string message) {
@@ -38,6 +39,7 @@ public:
         sf::FloatRect textBounds = sfml_text.getLocalBounds();
         sfml_text.setOrigin(textBounds.left + textBounds.width / 2, textBounds.top + textBounds.height / 2);
         sfml_text.setPosition(pos_x + dimensions.x / 2, pos_y + dimensions.y / 2);
+        std::cout << "pos message center " << sfml_text.getPosition().x << " " << sfml_text.getPosition().y << std::endl;
     }
 
     void pop_char() {

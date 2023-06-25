@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../structures/doubleList.h"
-#include "button.h"
+#include "box.h"
 
 using namespace sf;
 
