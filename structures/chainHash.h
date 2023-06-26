@@ -80,9 +80,7 @@ public:
 
     bool search(TK key) {
         size_t index = hashFunction(key);
-        if (buckets[index] != nullptr)
-            return true;
-        return false;
+        return buckets[index] != nullptr;
     }
 
     int bucket_count() const {

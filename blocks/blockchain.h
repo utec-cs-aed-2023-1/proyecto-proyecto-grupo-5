@@ -56,27 +56,28 @@ BlockChain::BlockChain(const string path="../assets/data/data.csv"){
 
     string line;
     
+    DoubleList<string> data;
     while(getline(file, line)) {
-        vector<string> data;
         stringstream ss(line);
         string word;
 
-        while(getline(ss, word, ',')) {
+        while(getline(ss, word, ','))
             data.push_back(word);
-        }
 
+        auto b = data.begin(), e = data.end();
+        string username = b->data;
+        string place = b->next->data;
+        string date = e->prev->data;
+        float amount = stof(e->data);
 
-        string username = data[0];
-        string place = data[1];
-        float amount = stof(data[3]);
-        string date = data[2];
+        // en caso no existe el usuario, crearlo
+        if (!usersHash->search(username))
+            crearUsuario(username);
 
-        crearUsuario(username);
         insertRetiro(username, place, amount, date);
-
+        data.clear();
     }
     file.close();
-
 
 }
 
@@ -92,12 +93,12 @@ void BlockChain::init_blockchain() {
 
 
 void BlockChain::crearUsuario(const string &nombreUsuario){
-    string hash = nombreUsuario;
+    string key = nombreUsuario;
     Block* block = (cantblocks == 0)? new Block :
         new Block(cantblocks, blocks->end()->data->getHash());
     
     blocks->push_back(block);
-    usersHash->set(hash, block);
+    usersHash->set(key, block);
     ++cantblocks;
 }
 
@@ -110,41 +111,41 @@ Block*& BlockChain::operator[](unsigned int idx) {
 }
 
 bool BlockChain::buscandoUsuario(const string &nombreUsuario){
-    string hash = nombreUsuario;
-    return usersHash->search(hash);
+    string key = nombreUsuario;
+    return usersHash->search(key);
 }
 
 void BlockChain::insertRetiro(const string &nombreUsuario, const string &lugar, float monto, const string &fecha){
-    string hash = nombreUsuario;
-    if (!usersHash->search(hash)) {
+    string key = nombreUsuario;
+    if (!usersHash->search(key)) {
         std::cout << "---- Usuario no registrado ----" << endl;
         return;
     }
     Transaction transaccion(nombreUsuario,lugar, fecha, monto);
-    usersHash->get(hash)->insert(transaccion);
+    usersHash->get(key)->insert(transaccion);
 }
 
 Transaction BlockChain::MaxFecha(const string &nombreUsuario){
-    string hash = nombreUsuario;
-    Transaction transaction = usersHash->get(hash)->maxDate();
+    string key = nombreUsuario;
+    Transaction transaction = usersHash->get(key)->maxDate();
     return transaction;
 }
 
 Transaction BlockChain::MinFecha(const string &nombreUsuario){
-    string hash = nombreUsuario;
-    Transaction transaction = usersHash->get(hash)->minDate();
+    string key = nombreUsuario;
+    Transaction transaction = usersHash->get(key)->minDate();
     return transaction;
 }
 
 Transaction BlockChain::MaxMonto(const string &nombreUsuario){
-    string hash = nombreUsuario;
-    Transaction transaction = usersHash->get(hash)->maxAmount();
+    string key = nombreUsuario;
+    Transaction transaction = usersHash->get(key)->maxAmount();
     return transaction;
 }
 
 Transaction BlockChain::MinMonto(const string &nombreUsuario){
-    string hash = nombreUsuario;
-    Transaction transaction = usersHash->get(hash)->minAmount();
+    string key = nombreUsuario;
+    Transaction transaction = usersHash->get(key)->minAmount();
     return transaction;
 }
 
@@ -169,8 +170,8 @@ void BlockChain::trayendoArchivo(const std::string& path = "./assets/data/500DAT
 }*/
 
 void BlockChain::updateTransaction(int indexBlock, const string &username, const string& place, float amount, const string& date){
-    string hash = username ;
-    Block* tx = usersHash->get(hash);
+    string key = username ;
+    Block* tx = usersHash->get(key);
     Transaction toChange(username,place, date, amount);
     tx->updateTx(toChange, place, amount, date);
 }

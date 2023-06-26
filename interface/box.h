@@ -12,7 +12,7 @@ const int FORM_TEXT_SIZE = 10;
 const int FEAT_BUTTON_SIZE = 25;
 const int BUTTON_SIZE = 20;
 
-class InstanceBox {
+class BoxMessage {
 protected:
     struct Position {
         float x, y;
@@ -24,12 +24,12 @@ protected:
     RectangleShape* rectangle;
 
 public:
-    ~InstanceBox() {
+    ~BoxMessage() {
         delete message;
         delete rectangle;
     }
 
-    InstanceBox(string text, float pos_x, float pos_y, int textSize, Color lineColor, Color colorText = Color::White): 
+    BoxMessage(string text, float pos_x, float pos_y, int textSize, Color lineColor, Color colorText = Color::White): 
         message(new Message(text, pos_x, pos_y, textSize, colorText)),
         rectangle(new RectangleShape(
             Vector2f(textSize*text.size()* 2/3, textSize + textSize*2/3)
@@ -57,19 +57,13 @@ public:
     }
 
     Text getMessage() { return message->getText(); }
-
-    void onMouseEvent() {
-        sf::Color temp = rectangle->getFillColor();
-        rectangle->setFillColor(message->getText().getFillColor());
-        message->changeColor(temp);
-    }
 };
 
 
-class Input: public InstanceBox {
+class Input: public BoxMessage {
 public:
     Input(string text, float pos_x, float pos_y): 
-        InstanceBox(text, pos_x, pos_y, FORM_TEXT_SIZE, Color::White) {}
+        BoxMessage(text, pos_x, pos_y, FORM_TEXT_SIZE, Color::White) {}
 
     void updateMessage(string newtext) {
         message->setMessage(newtext);
@@ -94,10 +88,26 @@ public:
 };
 
 
-class Button: public InstanceBox {
+class Button: public BoxMessage {
 public:
     Button(string text, float pos_x, float pos_y, sf::Color linecolor, int textSize = BUTTON_SIZE): 
-        InstanceBox(text, pos_x, pos_y, textSize, linecolor) {}
+        BoxMessage(text, pos_x, pos_y, textSize, linecolor) {}
+
+    void onMouseEvent() {
+        sf::Color temp = rectangle->getFillColor();
+        rectangle->setFillColor(message->getText().getFillColor());
+        message->changeColor(temp);
+    }
+
+    bool on_click(Event& event) {
+        // Activa cuando se hizo clic en el botón
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+            if (rectangle->getGlobalBounds().contains(mousePosition))
+                return true;
+        }
+        return false;
+    }
 };
 
 #endif // BUTTON_GUI_H
