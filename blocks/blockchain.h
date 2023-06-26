@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 #include <string>
 #include "block.h"
 #include "../structures/node.h"
@@ -20,7 +21,7 @@ private:
     
 public:
  
-  BlockChain() = default;
+  BlockChain(const string path);
   int get_cantBlocks() { return cantblocks; }
   ~BlockChain() {
       delete blocks;
@@ -28,8 +29,6 @@ public:
   };
 
   void init_blockchain();
-
-  BlockChain(const string &usuarios,const string &retiros);
   void crearUsuario(const string &nombreUsuario);
   Block*& operator[](unsigned int);
   bool buscandoUsuario(const string &nombreUsuario);
@@ -42,29 +41,43 @@ public:
   Transaction MinMonto(const std::string &nombreUsuario);
   void cascada(const string &nombreUsuario);
   void trayendoArchivo(const std::string& path);
+  void updateTransaction(int indexBlock, const string &username, const string& place, float amount, const string& date);
 };
 
-BlockChain::BlockChain(const string &archivoUsuarios, const string &archivoRetiros){
-    // CAMBIAR LOGICA
+BlockChain::BlockChain(const string path="../assets/data/data.csv"){
+    ifstream file;
+    file.open(path);
+
+    if (!file.is_open()) {
+        cout << "Error al abrir el archivo" << endl;
+        return;
+    }
+    cout << "Archivo abierto" << endl;
 
     string line;
-    auto *file = new ifstream(archivoUsuarios);
-    getline(*file, line,'\n');
     
-    string username;
-    while((*file) >> username){
-        crearUsuario(username);
-    }
-    file->close();
+    while(getline(file, line)) {
+        vector<string> data;
+        stringstream ss(line);
+        string word;
 
-    file = new ifstream(archivoRetiros);
-    getline(*file,line,'\n');
-    
-    string amount,place,date;
-    while((*file) >> username >> date >> place >> amount){
-        insertRetiro(username,place,stof(amount),date);
+        while(getline(ss, word, ',')) {
+            data.push_back(word);
+        }
+
+
+        string username = data[0];
+        string place = data[1];
+        float amount = stof(data[3]);
+        string date = data[2];
+
+        crearUsuario(username);
+        insertRetiro(username, place, amount, date);
+
     }
-    file->close();
+    file.close();
+
+
 }
 
 
@@ -139,6 +152,7 @@ void BlockChain::cascada(const string &nombreUsuario) {
     // identifica al hash no valido y procede a minar en cascada
 }
 
+/*
 void BlockChain::trayendoArchivo(const std::string& path = "./assets/data/500DATA.csv") {
     std::ofstream file(path);
     file << "client,place,date,amount" << endl;
@@ -152,4 +166,11 @@ void BlockChain::trayendoArchivo(const std::string& path = "./assets/data/500DAT
         }
     }
     file.close();
+}*/
+
+void BlockChain::updateTransaction(int indexBlock, const string &username, const string& place, float amount, const string& date){
+    string hash = username ;
+    Block* tx = usersHash->get(hash);
+    Transaction toChange(username,place, date, amount);
+    tx->updateTx(toChange, place, amount, date);
 }
