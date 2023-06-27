@@ -94,6 +94,9 @@ private:  //// funcionalidades
         return;
     }
 
+    void updateTransaction() {
+    }
+
 
 public:  //// para realizar testing sin acceso al backend de la app
 
@@ -104,7 +107,8 @@ public:  //// para realizar testing sin acceso al backend de la app
                     VisualizateBlocks();
                     break;
 
-                case Options::listingTxs:
+                case Options::profileUser:
+                    ProfileUser();
                     break;
 
                 case Options::initmenu:
@@ -121,6 +125,10 @@ public:  //// para realizar testing sin acceso al backend de la app
 private:   //// Views
 
     void VisualizateBlocks() {
+        // boton para ver las transacciones al seleccionar un usuario en un bloque
+        Button* view_profile_button = new Button(
+            VIEW_TXS, window.getSize().x/2, window.getSize().y /2 + 50, Color::Cyan
+        );
         
         while (window.isOpen()) {
             Event event;
@@ -133,38 +141,17 @@ private:   //// Views
             window.clear(sf::Color::Black);
 
             // visualizar
+            view_profile_button->draw(window);
             window.display();
         }
     }
 
-
-    void ViewTransactions() {
-        // boton para ver las transacciones al seleccionar un usuario
-        Button* viewTransactions_button = new Button(
-            VIEW_TXS, window.getSize().x/2, window.getSize().y /2 + 50, Color::Cyan
-        );
-        
-        while (window.isOpen()) {
-            Event event;
-            while (window.pollEvent(event)) {
-                if (event.type == Event::Closed) {
-                    options = Options::closed;
-                    return;
-                }
-            }
-            // visualizar
-            viewTransactions_button->draw(window);
-            window.display();
-        }
-    }
-
-
-    void updateTransaction() {
+    void ProfileUser() {
         // boton para actualizar transaction
         Button* updateTransaction_button = new Button(
             UPDATE_TX, window.getSize().x/2, window.getSize().y /2 + 100, Color::Cyan
         );
-
+        
         while (window.isOpen()) {
             Event event;
             while (window.pollEvent(event)) {

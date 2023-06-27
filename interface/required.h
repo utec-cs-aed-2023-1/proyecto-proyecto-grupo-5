@@ -9,5 +9,5 @@ enum Options {
     closed,         // cuando la app se cierra
     initmenu,       // cuando muestra el menu incial
     visualizate,    // cuando muestra la vista de bloques
-    listingTxs      // cuando muestra la lista de transacciones
+    profileUser     // Vista del perfil d eusuario
 };

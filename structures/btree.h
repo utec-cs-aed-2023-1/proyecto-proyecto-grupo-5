@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "node.h"
+#include <list>
 using namespace std;
 
 template <typename T>
@@ -27,6 +28,7 @@ private:
 
     void merge(NodeBtree<T>* node, int i){ //une dos nodos
         NodeBtree<T>* child=node->children[i];
+        list<int> s;
         NodeBtree<T>* sibling=node->children[i+1];
 
         child->keys[M/2-1]=node->keys[i];
