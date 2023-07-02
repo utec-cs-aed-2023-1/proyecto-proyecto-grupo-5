@@ -22,17 +22,6 @@ private:
         return maxKey(node->children[node->count]);
     }
 
-    void clear(NodeBplusTree<T>* node){ //eliminar el subarbol por un nodo
-        if(node->leaf){
-            delete node;
-            return;
-        }
-        for(int i=0;i<=node->count;i++){
-            clear(node->children[i]);
-        }
-        delete node;
-    }
-
     void displayChildren(NodeBplusTree<T>* node, int index){
         if (node->leaf) {
             for (int i=0; i<M-1; ++i)
@@ -41,7 +30,7 @@ private:
         }
 
         for(int i=0;i<node->children[index]->count;i++){
-            displayChildren(node->children[index]->keys[i]);
+            displayChildren(node->children[index]);
         }
         cout << " | ";
     }
@@ -99,7 +88,7 @@ public:
     }
 
     void clear(){
-        clear(root);
+        root->killSelf();
         root=nullptr;
         n = 0;
     }

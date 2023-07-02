@@ -89,7 +89,7 @@ struct NodeBplusTree {
 
         if(origin->leaf){
 
-		}
+        }
         else if (origin->leaf == false){
             for(int i=M/2+1,j=0;i<M;i++,j++){
                 sibling->keys[j] = origin->keys[i];
@@ -104,12 +104,10 @@ struct NodeBplusTree {
     }
 
     void killSelf() {
-        if (leaf) {
-            delete[] keys;
-            delete[] children;
-        }
-        for (int i = 0; i <= count; i++) {
-            children[i]->killSelf();
+        if (!leaf) {
+            for (int i = 0; i <= count; i++) {
+                children[i]->killSelf();
+            }
         }
         delete[] keys;
         delete[] children;

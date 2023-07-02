@@ -44,7 +44,7 @@ public:
   void updateTransaction(int indexBlock, const string &username, const string& place, float amount, const string& date);
 };
 
-BlockChain::BlockChain(const string path="../assets/data/data.csv"){
+BlockChain::BlockChain(const string path="./assets/data/datamin.csv"){
     ifstream file;
     file.open(path);
 

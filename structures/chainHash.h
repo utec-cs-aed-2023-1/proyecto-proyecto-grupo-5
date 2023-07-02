@@ -4,6 +4,7 @@
 #include <sstream>
 #include "doubleList.h"
 #include "constants.h"
+#include "../utils/SHA256.h"
 #include <cmath>
 using namespace std;
 
@@ -80,6 +81,7 @@ public:
 
     bool search(TK key) {
         size_t index = hashFunction(key);
+        cout << "idx hash" << index << endl;
         return buckets[index] != nullptr;
     }
 
@@ -112,16 +114,17 @@ private:
 
     size_t hashFunction(TK key) {
         stringstream skey;   skey << key;          // se llama a operator << para pasar a string
-        string strkey = skey.str();
-        int sum = 0;
+        string strkey = sha256(skey.str());
 
-        // algoritmo Rolling polynomial
-        for (int i = 0; i < (int) strkey.size(); i++) {
-            int res = (int)strkey[i] * (int)pow(PRIMECONST, i);
-            sum += res % capacity;
+        std::stringstream stream;
+        for (int i = 0; i < 4; ++i) {
+            stream << std::hex << std::setw(2) << std::setfill('0') 
+                   << static_cast<unsigned int>(strkey[i]);
         }
+        unsigned int partialHash;
+        stream >> partialHash;
 
-        return sum % capacity;
+        return partialHash % capacity;
     }
 };
 

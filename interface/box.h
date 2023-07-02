@@ -99,7 +99,7 @@ public:
         message->changeColor(temp);
     }
 
-    bool on_click(Event& event) {
+    bool on_click(RenderWindow& window, Event& event) {
         // Activa cuando se hizo clic en el botón
         if (event.mouseButton.button == sf::Mouse::Left) {
             sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
