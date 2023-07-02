@@ -28,12 +28,12 @@ const CompTx minor_date = [](const Transaction& a, const Transaction& b) { retur
 
 // Definición de la estructura del bloque
 class Block {
-private:
+public:
     int index;                          // Índice del bloque en la cadena
     string timestamp;              // Marca de tiempo en la que se crea el bloque
     int cantTransactions = 0;           // Cantidad de transacciones
     
-    TxList* list_data = new TxList;
+    TxList list_data ;
     TxAVL* tree_amount = new TxAVL(minor_amount, mayor_amount);
     TxAVL* tree_date = new TxAVL(minor_date, mayor_date);
     
@@ -53,7 +53,6 @@ private:
     }
 
     ~Block() {
-        delete list_data;
         delete tree_amount;
         delete tree_date;
     }
@@ -75,7 +74,7 @@ private:
         ss << index << timestamp << previousHash << nonce;
 
         // agregamos las transacciones
-        TxNode* nodetemp = getTransactions()->begin();
+        TxNode* nodetemp = getTransactions().begin();
         while (nodetemp != nullptr) {
             ss << nodetemp->data;
             nodetemp = nodetemp->next;
@@ -108,7 +107,7 @@ private:
         std::cout << "-- Previous Hash: " << previousHash << endl;
         std::cout << "-- Hash: " << hash << endl;
         std::cout << "-- Transactions :" << endl;
-        TxNode* nodetemp = getTransactions()->begin();
+        TxNode* nodetemp = getTransactions().begin();
         while (nodetemp != nullptr) {
             std::cout << "---------" << endl;
             nodetemp->data.printTransaction();
@@ -124,7 +123,7 @@ private:
 
     // Inserta una nueva transaccion
     void insert(Transaction transaction) {
-        list_data->push_back(transaction);
+        list_data.push_back(transaction);
         tree_amount->insert(transaction);
         tree_date->insert(transaction);
         this->hash = calculateHash();
@@ -133,12 +132,12 @@ private:
     }
 
 
-    // actualiza una transaccion espacífica
+    // actualiza una transaccion específica
     void updateTx(Transaction changed, string place, int amount, string date) {
         Transaction newer(changed.client, place, date, amount);
         tree_amount->update(changed, newer);
         tree_date->update(changed, newer);
-        list_data->update(changed, newer);
+        list_data.update(changed, newer);
         // rehashea
         this->hash = calculateHash();
     }
@@ -146,8 +145,8 @@ private:
 
     // remover una transaccion
     void removeTransaction(int indexTx) {
-        Transaction transaction = list_data->operator[](indexTx);
-        list_data->remove(indexTx);
+        Transaction transaction = list_data.operator[](indexTx);
+        list_data.remove(indexTx);
         tree_amount->remove(transaction);
         tree_date->remove(transaction);
         // rehashea
@@ -161,13 +160,13 @@ private:
     }
 
     // devuelve la lista de transacciones
-    TxList* getTransactions() {
+    TxList getTransactions() {
         return list_data;
     } 
 
     // Valida si se encuentra la transaccion 
     bool search(Transaction transaction) {
-        return list_data->search(transaction);
+        return list_data.search(transaction);
     } 
 
     // -- La transaccion con mayor monto

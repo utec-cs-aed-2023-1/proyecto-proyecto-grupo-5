@@ -10,13 +10,13 @@
 using namespace std;
 
 typedef DoubleList<Block*> LBlocks;
-typedef ChainHash<string, Block*> hashBlock;
+typedef ChainHash<string, NodeList<Block *> *> hashBlock;
 typedef NodeList<Block*> NodeB;
 
 class BlockChain {
 private:
-    LBlocks* blocks = new LBlocks;                  // lista de bloques enlazados
-    hashBlock* usersHash = new hashBlock;          // hashtable de par (usuario,bloque)
+    LBlocks* blocks =new LBlocks;                  // lista de bloques enlazados
+    hashBlock* usersHash = new hashBlock;        //hashtable de par (usuario,bloque)
     int cantblocks =0;                             // cantidad de bloques
     
 public:
@@ -24,14 +24,13 @@ public:
   BlockChain(const string path);
   int get_cantBlocks() { return cantblocks; }
   ~BlockChain() {
-      delete blocks;
-      delete usersHash;
+      //delete usersHash;
   };
 
   void init_blockchain();
   void crearUsuario(const string &nombreUsuario);
   Block*& operator[](unsigned int);
-  bool buscandoUsuario(const string &nombreUsuario);
+  Block* buscandoBloquexKey(const string &nombreUsuario); // primera busqueda
   void insertRetiro(const string &nombreUsuario, const string &lugar, float monto, const string &fecha);
   bool buscandoData(const string &nombreUsuario, const string &lugar, float monto, const string &fecha);
   void losRetiros(const std::string &nombreUsuario);
@@ -40,8 +39,7 @@ public:
   Transaction MaxMonto(const std::string &nombreUsuario);
   Transaction MinMonto(const std::string &nombreUsuario);
   void cascada(const string &nombreUsuario);
-  void trayendoArchivo(const std::string& path);
-  void updateTransaction(int indexBlock, const string &username, const string& place, float amount, const string& date);
+  void downloadFile(const string& path);
 };
 
 BlockChain::BlockChain(const string path="./assets/data/datamin.csv"){
@@ -95,10 +93,10 @@ void BlockChain::init_blockchain() {
 void BlockChain::crearUsuario(const string &nombreUsuario){
     string key = nombreUsuario;
     Block* block = (cantblocks == 0)? new Block :
-        new Block(cantblocks, blocks->end()->data->getHash());
+    new Block(cantblocks, blocks->end()->data->getHash());
     
     blocks->push_back(block);
-    usersHash->set(key, block);
+    usersHash->set(key, blocks->begin());
     ++cantblocks;
 }
 
@@ -110,10 +108,14 @@ Block*& BlockChain::operator[](unsigned int idx) {
     return iter->data;
 }
 
-bool BlockChain::buscandoUsuario(const string &nombreUsuario){
+// implementando primera busqueda ------------------------------
+Block* BlockChain::buscandoBloquexKey(const string& nombreUsuario){
     string key = nombreUsuario;
-    return usersHash->search(key);
-}
+    if (usersHash->search(key)){ //--
+        return usersHash->get(key)->data;
+    }
+    return nullptr;
+  }
 
 void BlockChain::insertRetiro(const string &nombreUsuario, const string &lugar, float monto, const string &fecha){
     string key = nombreUsuario;
@@ -122,56 +124,41 @@ void BlockChain::insertRetiro(const string &nombreUsuario, const string &lugar, 
         return;
     }
     Transaction transaccion(nombreUsuario,lugar, fecha, monto);
-    usersHash->get(key)->insert(transaccion);
+    usersHash->get(key)->data->insert(transaccion);
 }
 
 Transaction BlockChain::MaxFecha(const string &nombreUsuario){
     string key = nombreUsuario;
-    Transaction transaction = usersHash->get(key)->maxDate();
+    Transaction transaction = usersHash->get(key)->data->maxDate();
     return transaction;
 }
 
 Transaction BlockChain::MinFecha(const string &nombreUsuario){
     string key = nombreUsuario;
-    Transaction transaction = usersHash->get(key)->minDate();
+    Transaction transaction = usersHash->get(key)->data->minDate();
     return transaction;
 }
 
 Transaction BlockChain::MaxMonto(const string &nombreUsuario){
     string key = nombreUsuario;
-    Transaction transaction = usersHash->get(key)->maxAmount();
+    Transaction transaction = usersHash->get(key)->data->maxAmount();
     return transaction;
 }
 
 Transaction BlockChain::MinMonto(const string &nombreUsuario){
     string key = nombreUsuario;
-    Transaction transaction = usersHash->get(key)->minAmount();
+    Transaction transaction = usersHash->get(key)->data->minAmount();
     return transaction;
 }
 
-void BlockChain::cascada(const string &nombreUsuario) {
-    // identifica al hash no valido y procede a minar en cascada
-}
-
-/*
-void BlockChain::trayendoArchivo(const std::string& path = "./assets/data/500DATA.csv") {
-    std::ofstream file(path);
-    file << "client,place,date,amount" << endl;
-    
-    for (int i=0; i < cantblocks; i++) {
-        TxList* tx = blocks->operator[](i)->getTransactions();
-        TxNode* temp = tx->begin();
-        while (temp != nullptr) {
-            file << temp->data << std::endl;
-            temp = temp->next;
-        }
+void BlockChain::cascada(const string &nombreUsuario){
+    string hash = nombreUsuario;
+    usersHash->get(hash)->data->mineBlock();
+    auto i = usersHash->get(hash);
+    i = i->next;
+    while (i != nullptr) {
+        i->data->previousHash = i->prev->data->hash;
+        i->data->mineBlock();
+        i = i->next;
     }
-    file.close();
-}*/
-
-void BlockChain::updateTransaction(int indexBlock, const string &username, const string& place, float amount, const string& date){
-    string key = username ;
-    Block* tx = usersHash->get(key);
-    Transaction toChange(username,place, date, amount);
-    tx->updateTx(toChange, place, amount, date);
 }
