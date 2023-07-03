@@ -32,8 +32,6 @@ public:
   Block*& operator[](unsigned int);
   Block* buscandoBloquexKey(const string &nombreUsuario); // primera busqueda
   void insertRetiro(const string &nombreUsuario, const string &lugar, float monto, const string &fecha);
-  bool buscandoData(const string &nombreUsuario, const string &lugar, float monto, const string &fecha);
-  void losRetiros(const std::string &nombreUsuario);
   Transaction MaxFecha(const std::string &nombreUsuario);
   Transaction MinFecha(const std::string &nombreUsuario);
   Transaction MaxMonto(const std::string &nombreUsuario);
