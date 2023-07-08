@@ -1,22 +1,11 @@
-// por consola
-
-// #include "blocks/blockchain.h"
-
-// int main() {
-//     BlockChain* blockchain = new BlockChain;
-//     blockchain->init_blockchain();
-//     delete blockchain;
-// }
-
-// por SFML
-
 #include <iostream>
-#include "interface/gui.h"
+#include "./interface/menu.h"
 
 using namespace std;
 
 int main() {
-    AppGui* gui = new AppGui;
-    gui->init_visualize_app();
-    delete gui;
+
+    Init_Menu();
+
+    return 0;
 }
