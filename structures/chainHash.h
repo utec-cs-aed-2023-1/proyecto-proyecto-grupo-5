@@ -137,7 +137,7 @@ private:
     }
 
     size_t hashFunction(TK key) {
-        stringstream skey;   skey << key;          // se llama a operator << para pasar a string
+        stringstream skey;   skey << key;        // se llama a operator << para pasar a string
         string strkey = sha256(skey.str());
 
         std::stringstream stream;
