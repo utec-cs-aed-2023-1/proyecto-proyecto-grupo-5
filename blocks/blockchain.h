@@ -36,10 +36,10 @@ public:
   Transaction MinFecha(const std::string &nombreUsuario);
   Transaction MaxMonto(const std::string &nombreUsuario);
   Transaction MinMonto(const std::string &nombreUsuario);
-  vector<string> empieza_nombre_T(const string &prefijo);
-  vector<string> contiene_nombre_T(const string &patron);
-  vector<string> empieza_lugar_T(const string &prefijo);
-  vector<string> contiene_lugar_T(const string &patron);
+  void empieza_nombre_T(const string &prefijo);
+  void contiene_nombre_T(const string &patron);
+  void empieza_lugar_T(const string &prefijo);
+  void contiene_lugar_T(const string &patron);
   void cascada(const string &nombreUsuario);
   void downloadFile(const string& path);
 };
@@ -176,53 +176,50 @@ Transaction BlockChain::MinMonto(const string &nombreUsuario){
     return transaction;
 }
 
-vector<string> BlockChain::empieza_nombre_T(const string &prefijo){
-    vector<string> usuarios;
+void BlockChain::empieza_nombre_T(const string &prefijo){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& user : iter->data->searchFirst_nombre(prefijo)) {
-            usuarios.push_back(user);
+            cout << user <<"  ";
         }
         iter = iter->next;
+        cout << endl;
     }
-    return usuarios;
 }
 
-vector<string> BlockChain::contiene_nombre_T(const string &patron){
-    vector<string> usuarios;
+void BlockChain::contiene_nombre_T(const string &patron){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& user : iter->data->searchContent_nombre(patron)) {
-            usuarios.push_back(user);
+                cout << user <<"  ";
         }
         iter = iter->next;
+        cout << endl;
     }
-    return usuarios;
 }
 
-vector<string> BlockChain::empieza_lugar_T(const string &prefijo){
-    vector<string> lugares;
+void BlockChain::empieza_lugar_T(const string &prefijo){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& place : iter->data->searchFirst_lugar(prefijo)) {
-            lugares.push_back(place);
+                cout << place <<"  ";
         }
         iter = iter->next;
-    }
-    return lugares;
+        cout << endl;
+   }
 }
 
-vector<string> BlockChain::contiene_lugar_T(const string &patron){
-    vector<string> lugares;
+void BlockChain::contiene_lugar_T(const string &patron){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& place : iter->data->searchContent_lugar(patron)) {
-            lugares.push_back(place);
+              cout << place <<"  ";
         }
         iter = iter->next;
-    }
-    return lugares;
+        cout << endl;
+   }
 }
+
 
 
 
