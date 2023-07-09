@@ -237,12 +237,12 @@ public:
             if(root->count==(2*M-1)){
                 NodeBtree<T>* newNode=new NodeBtree<T>(M,false);
                 newNode->children[0]=root;
-                newNode->splitChild(0,root);
+                newNode->children[i]->insertNonFull(key);
                 int i=0;
                 if(newNode->keys[0]<key){
-                        i++;
+                    i++;
                 }
-                newNode->children[i]->insertNonFull(key);
+                newNode->splitChild(0,root);
                 root=newNode;
                 n++;
             }
