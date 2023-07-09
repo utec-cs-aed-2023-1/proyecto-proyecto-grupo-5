@@ -37,7 +37,6 @@ public:
     TxList* list_data = new TxList ;
     TxAVL* tree_amount = new TxAVL(minor_amount, mayor_amount);
     TxAVL* tree_date = new TxAVL(minor_date, mayor_date);
-    Trie *trie = new TrieSimple();
     
     string previousHash;           // Hash del bloque anterior en la cadena
     string hash;                   // Hash del bloque actual
@@ -58,7 +57,6 @@ public:
         delete list_data;
         delete tree_amount;
         delete tree_date;
-        delete trie;
     }
 
 
@@ -126,11 +124,10 @@ public:
 
 
     // Inserta una nueva transaccion
-    void insert(Transaction transaction,string nombreUsuario) {
+    void insert(Transaction transaction) {
         list_data->push_back(transaction);
         tree_amount->insert(transaction);
         tree_date->insert(transaction);
-        //trie->insert(nombreUsuario);
         this->hash = calculateHash();
         mineBlock();
         ++cantTransactions;
@@ -195,13 +192,49 @@ public:
     }
 
     // -- Buscar nombres de usuarios que empiecen con un prefijo
-    vector<string> searchFirst(string prefix) {
+    vector<string> searchFirst_nombre(string prefix) {
+        Trie* trie = new TrieSimple();
+        TxNode* nodetemp = getTransactions()->begin();
+        while (nodetemp != nullptr) {
+            trie->insert(nodetemp->data.client);
+            nodetemp = nodetemp->next;
+        }
         vector<string> result = trie->searchFirst(prefix);
         return result;
     }
 
     // -- Buscar transacciones que contengan un patron
-    vector<string> searchContent(const std::string& patron) {
+    vector<string> searchContent_nombre(const std::string& patron) {
+        Trie* trie = new TrieSimple();
+        TxNode* nodetemp = getTransactions()->begin();
+        while (nodetemp != nullptr) {
+            trie->insert(nodetemp->data.client);
+            nodetemp = nodetemp->next;
+        }
+        vector<string> result = trie->searchContent(patron);
+        return result;
+    }
+
+    // -- Buscar nombres de lugares que empiecen con un prefijo
+    vector<string> searchFirst_lugar(string prefix) {
+        Trie* trie = new TrieSimple();
+        TxNode* nodetemp = getTransactions()->begin();
+        while (nodetemp != nullptr) {
+            trie->insert(nodetemp->data.place);
+            nodetemp = nodetemp->next;
+        }
+        vector<string> result = trie->searchFirst(prefix);
+        return result;
+    }
+
+    // -- Buscar transacciones que contengan un patron
+    vector<string> searchContent_lugar(const std::string& patron) {
+        Trie* trie = new TrieSimple();
+        TxNode* nodetemp = getTransactions()->begin();
+        while (nodetemp != nullptr) {
+            trie->insert(nodetemp->data.place);
+            nodetemp = nodetemp->next;
+        }
         vector<string> result = trie->searchContent(patron);
         return result;
     }

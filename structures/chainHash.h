@@ -81,7 +81,7 @@ public:
 
     bool search(TK key) {
         size_t index = hashFunction(key);
-        cout << "idx hash" << index << endl;
+        //cout << "idx hash" << index << endl;
         return buckets[index] != nullptr;
     }
 

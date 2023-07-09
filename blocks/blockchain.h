@@ -36,6 +36,10 @@ public:
   Transaction MinFecha(const std::string &nombreUsuario);
   Transaction MaxMonto(const std::string &nombreUsuario);
   Transaction MinMonto(const std::string &nombreUsuario);
+  vector<string> empieza_nombre_T(const string &prefijo);
+  vector<string> contiene_nombre_T(const string &patron);
+  vector<string> empieza_lugar_T(const string &prefijo);
+  vector<string> contiene_lugar_T(const string &patron);
   void cascada(const string &nombreUsuario);
   void downloadFile(const string& path);
 };
@@ -136,7 +140,7 @@ void BlockChain::insertRetiro(const string &nombreUsuario, const string &lugar, 
         return;
     }
     Transaction transaccion(nombreUsuario,lugar, fecha, monto);
-    usersHash->get(key)->data->insert(transaccion,nombreUsuario);
+    usersHash->get(key)->data->insert(transaccion);
     usersHash->get(key)->data->hash = usersHash->get(key)->data->calculateHash();
 
     auto i = usersHash->get(key);
@@ -171,6 +175,56 @@ Transaction BlockChain::MinMonto(const string &nombreUsuario){
     Transaction transaction = usersHash->get(key)->data->minAmount();
     return transaction;
 }
+
+vector<string> BlockChain::empieza_nombre_T(const string &prefijo){
+    vector<string> usuarios;
+    NodeB* iter = blocks->begin();
+    while (iter != nullptr) {
+        for (const auto& user : iter->data->searchFirst_nombre(prefijo)) {
+            usuarios.push_back(user);
+        }
+        iter = iter->next;
+    }
+    return usuarios;
+}
+
+vector<string> BlockChain::contiene_nombre_T(const string &patron){
+    vector<string> usuarios;
+    NodeB* iter = blocks->begin();
+    while (iter != nullptr) {
+        for (const auto& user : iter->data->searchContent_nombre(patron)) {
+            usuarios.push_back(user);
+        }
+        iter = iter->next;
+    }
+    return usuarios;
+}
+
+vector<string> BlockChain::empieza_lugar_T(const string &prefijo){
+    vector<string> lugares;
+    NodeB* iter = blocks->begin();
+    while (iter != nullptr) {
+        for (const auto& place : iter->data->searchFirst_lugar(prefijo)) {
+            lugares.push_back(place);
+        }
+        iter = iter->next;
+    }
+    return lugares;
+}
+
+vector<string> BlockChain::contiene_lugar_T(const string &patron){
+    vector<string> lugares;
+    NodeB* iter = blocks->begin();
+    while (iter != nullptr) {
+        for (const auto& place : iter->data->searchContent_lugar(patron)) {
+            lugares.push_back(place);
+        }
+        iter = iter->next;
+    }
+    return lugares;
+}
+
+
 
 void BlockChain::cascada(const string &nombreUsuario){
     string hash = nombreUsuario;
