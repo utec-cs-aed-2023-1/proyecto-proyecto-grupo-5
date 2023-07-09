@@ -40,7 +40,7 @@ public:
   void downloadFile(const string& path);
 };
 
-BlockChain::BlockChain(const string path="./assets/data/datamin.csv"){
+BlockChain::BlockChain(const string path="../assets/data/datamin.csv"){
     ifstream file;
     file.open(path);
 
@@ -89,13 +89,27 @@ void BlockChain::init_blockchain() {
 
 
 void BlockChain::crearUsuario(const string &nombreUsuario){
+    /*
     string key = nombreUsuario;
     Block* block = (cantblocks == 0)? new Block :
     new Block(cantblocks, blocks->end()->data->getHash());
     
     blocks->push_back(block);
     usersHash->set(key, blocks->begin());
-    ++cantblocks;
+    ++cantblocks;*/
+
+    if(blocks->is_empty()){
+        Block* block = new Block;
+        blocks->push_back(block);
+        usersHash->set(nombreUsuario, blocks->begin());
+        ++cantblocks;
+    }
+    else{
+        Block* block = new Block(cantblocks, blocks->end()->data->hash);
+        blocks->push_back(block);
+        usersHash->set(nombreUsuario, blocks->end());
+        ++cantblocks;
+    }
 }
 
 Block*& BlockChain::operator[](unsigned int idx) {
@@ -122,7 +136,16 @@ void BlockChain::insertRetiro(const string &nombreUsuario, const string &lugar, 
         return;
     }
     Transaction transaccion(nombreUsuario,lugar, fecha, monto);
-    usersHash->get(key)->data->insert(transaccion);
+    usersHash->get(key)->data->insert(transaccion,nombreUsuario);
+    usersHash->get(key)->data->hash = usersHash->get(key)->data->calculateHash();
+
+    auto i = usersHash->get(key);
+    i = i->next;
+    while (i != nullptr) {
+        i->data->previousHash = i->prev->data->hash;
+        i->data->hash = i->data->calculateHash();
+        i = i->next;
+    }
 }
 
 Transaction BlockChain::MaxFecha(const string &nombreUsuario){
