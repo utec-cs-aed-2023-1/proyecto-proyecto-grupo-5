@@ -1,0 +1,14 @@
+cmake-build-debug
+cmake-build-release
+build
+obj
+bin
+# *.cbp
+*.depend
+*.layout
+*.o
+*.obj
+*.exe
+.vscode
+.idea
+*.bmp
