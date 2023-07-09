@@ -17,12 +17,14 @@ class BlockChain {
 private:
     LBlocks* blocks =new LBlocks;                  // lista de bloques enlazados
     hashBlock* usersHash = new hashBlock;        //hashtable de par (usuario,bloque)
-    int cantblocks =0;                             // cantidad de bloques
+    int cantblocks =0;
+    string maxUser;                             // cantidad de bloques
     
 public:
  
   BlockChain(const string path);
   int get_cantBlocks() { return cantblocks; }
+  string getMaxUser() const { return maxUser; }
   ~BlockChain() {
       //delete usersHash;
   };
@@ -35,6 +37,7 @@ public:
   Transaction MaxFecha(const std::string &nombreUsuario);
   Transaction MinFecha(const std::string &nombreUsuario);
   Transaction MaxMonto(const std::string &nombreUsuario);
+
   Transaction MinMonto(const std::string &nombreUsuario);
   void empieza_nombre_T(const string &prefijo);
   void contiene_nombre_T(const string &patron);
@@ -44,7 +47,7 @@ public:
   void downloadFile(const string& path);
 };
 
-BlockChain::BlockChain(const string path="../assets/data/datamin.csv"){
+BlockChain::BlockChain(const string path = "../assets/data/datamin.csv") {
     ifstream file;
     file.open(path);
 
@@ -55,30 +58,35 @@ BlockChain::BlockChain(const string path="../assets/data/datamin.csv"){
     cout << "Archivo abierto" << endl;
 
     string line;
-    
-    DoubleList<string> data;
-    while(getline(file, line)) {
+    float maxTransaction = 0.0; // Guarda la transacción máxima // Guarda el usuario con la transacción máxima
+
+    while (getline(file, line)) {
+        vector<string> data;
         stringstream ss(line);
         string word;
 
-        while(getline(ss, word, ','))
+        while (getline(ss, word, ',')) {
             data.push_back(word);
+        }
 
-        auto b = data.begin(), e = data.end();
-        string username = b->data;
-        string place = b->next->data;
-        string date = e->prev->data;
-        float amount = stof(e->data);
+        string username = data[0];
+        string place = data[1];
+        float amount = stof(data[3]);
+        string date = data[2];
 
-        // en caso no existe el usuario, crearlo
-        if (!usersHash->search(username))
-            crearUsuario(username);
-
+        crearUsuario(username);
         insertRetiro(username, place, amount, date);
-        data.clear();
+
+        // Si la transacción actual es más grande que la transacción máxima, actualizar la transacción y el usuario máximos
+        if (amount > maxTransaction) {
+            maxTransaction = amount;
+            maxUser = username; // Actualizar el valor de maxUser
+        }
     }
     file.close();
 
+    // Imprimir la transacción máxima y el usuario correspondiente
+    //cout << maxUser << endl;
 }
 
 
@@ -164,17 +172,32 @@ Transaction BlockChain::MinFecha(const string &nombreUsuario){
     return transaction;
 }
 
+
+/*
 Transaction BlockChain::MaxMonto(const string &nombreUsuario){
     string key = nombreUsuario;
     Transaction transaction = usersHash->get(key)->data->maxAmount();
     return transaction;
 }
+*/
+
+Transaction BlockChain::MaxMonto(const string& nombreUsuario) {
+    string key = nombreUsuario;
+    Transaction transaction = usersHash->get(key)->data->maxAmount();
+
+    // Actualizar el valor de maxUser con el usuario correspondiente a la transacción máxima
+    maxUser = nombreUsuario;
+
+    return transaction;
+}
+
 
 Transaction BlockChain::MinMonto(const string &nombreUsuario){
     string key = nombreUsuario;
     Transaction transaction = usersHash->get(key)->data->minAmount();
     return transaction;
 }
+
 
 void BlockChain::empieza_nombre_T(const string &prefijo){
     NodeB* iter = blocks->begin();
