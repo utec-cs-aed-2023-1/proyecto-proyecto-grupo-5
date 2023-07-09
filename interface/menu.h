@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../blocks/blockchain.h"
+#include "../blocks/block.h"
 
 using namespace std;
 
@@ -8,7 +9,7 @@ void printMenu() {
     cout << "1. Mostrar cadena de Blocks" << endl;
     cout << "2. Busqueda por igualdad a nombre de usuario" << endl;
     cout << "3. Busqueda por rango en monto" << endl;
-    cout << "4. Busqueda por rango en fecha" << endl;
+    cout << "4. Busqueda por rango en fecha" << endl; // no seguro
     cout << "5. Usuario inicia con" << endl;
     cout << "6. Lugar inicia con" << endl;
     cout << "7. Patron contenido en el nombre" << endl;
@@ -18,10 +19,10 @@ void printMenu() {
     cout << "11. Recalculo en cascada" << endl;
     cout << "12. Agregar transaccion" << endl; // o puede ser modificar bloque
     cout << "13. Actualizar transaccion" << endl;
-    cout << "13. Eliminar bloque o transaccion" << endl; ////////////////////////////
-    cout << "14. Salir" << endl;
+    cout << "14. Eliminar bloque o transaccion" << endl; ////////////////////////////
+    cout << "15. Salir" << endl;
     cout << "==================" << endl;
-    cout << "Seleccione una opción: ";
+    cout << "Seleccione una opcion: ";
 }
 
 
@@ -85,7 +86,7 @@ void Init_Menu(){
         {
             // Verificar si está contenido en un nombre
             std::string a_patron;
-            std::cout << "Ingrese el patrón: " << endl;
+            std::cout << "Ingrese el patron: " << endl;
             std::cin >> a_patron;
             blockchain->contiene_nombre_T(a_patron);
         }
@@ -103,7 +104,7 @@ void Init_Menu(){
         {
             // Buscar el monto mínimo
             std::string monto_min_nombre;
-            cout << "Ingrese el nombre del Usuario en el cual quisiera encontrar su monto mínimo: ";
+            cout << "Ingrese el nombre del Usuario en el cual quisiera encontrar su monto minimo: ";
             cin >> monto_min_nombre;
             blockchain->MinMonto(monto_min_nombre);
         }
@@ -112,7 +113,7 @@ void Init_Menu(){
         {
             // Buscar el monto máximo
             std::string monto_max_nombre;
-            cout << "Ingrese el nombre del Usuario en el cual quisiera encontrar su monto máximo: ";
+            cout << "Ingrese el nombre del Usuario en el cual quisiera encontrar su monto maximo: ";
             cin >> monto_max_nombre;
             blockchain->MaxMonto(monto_max_nombre);
         }
@@ -129,12 +130,30 @@ void Init_Menu(){
         case 12:
         {
             // Agregar aquí la lógica para agregar una transacción
+            std::string nombreUsuario;
+            cout << "Introduce el nombre de usuario donde se quisiera hacer un retiro: ";
+            cin >> nombreUsuario;
             
+            std::string lugar;
+            cout << "Introduce el lugar donde realiza el retiro: ";
+            cin >> lugar;
+            
+            float monto;
+            cout<< "Introduce el monto a retirar"<<endl;
+            cin>> monto;
+
+            std::string fecha;
+            cout << "Introduce la fecha en la que se realiza el retiro: ";
+            cin >> fecha;
+            blockchain->insertRetiro(nombreUsuario,lugar,monto,fecha);
         }
             break;
         case 13:
         {
             // Agregar aquí la lógica para actualizar una transacción
+            // void updateTx(Transaction changed, string place, int amount, string date) 
+            Block* block = new Block;
+           //FALTA AFINAR block->updateTx();
             break;  
         }
 
@@ -142,6 +161,7 @@ void Init_Menu(){
         case 14:
         {
             // Agregar aquí la lógica para eliminar una transacción
+            
             break;  
         }   
         case 15:
@@ -150,7 +170,7 @@ void Init_Menu(){
         }
             break;
         default:
-            cout << "Opción inválida. Intente nuevamente." << endl;
+            cout << "Opcion invalida. Intente nuevamente." << endl;
             break;
 
     }

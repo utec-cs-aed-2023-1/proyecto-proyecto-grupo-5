@@ -8,7 +8,7 @@
 #include "../structures/avl.h"
 #include "../structures/doubleList.h"
 #include "../utils/SHA256.h"
-#include "../structures/trie_busquedas.h"
+#include "../structures/trie.h"
 #include "transaction.h"
 
 using namespace std;
@@ -193,49 +193,50 @@ public:
 
     // -- Buscar nombres de usuarios que empiecen con un prefijo
     vector<string> searchFirst_nombre(string prefix) {
-        Trie* trie = new TrieSimple();
+        Trie* trie = new Trie();
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
             trie->insert(nodetemp->data.client);
             nodetemp = nodetemp->next;
         }
-        vector<string> result = trie->searchFirst(prefix);
+        vector<string> result = trie->inicia_con(prefix);
+        delete trie;
         return result;
     }
 
     // -- Buscar transacciones que contengan un patron
     vector<string> searchContent_nombre(const std::string& patron) {
-        Trie* trie = new TrieSimple();
+        Trie* trie = new Trie();
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
             trie->insert(nodetemp->data.client);
             nodetemp = nodetemp->next;
         }
-        vector<string> result = trie->searchContent(patron);
+        vector<string> result = trie->esta_contenido_en(patron);
         return result;
     }
 
     // -- Buscar nombres de lugares que empiecen con un prefijo
     vector<string> searchFirst_lugar(string prefix) {
-        Trie* trie = new TrieSimple();
+        Trie* trie = new Trie();
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
             trie->insert(nodetemp->data.place);
             nodetemp = nodetemp->next;
         }
-        vector<string> result = trie->searchFirst(prefix);
+        vector<string> result = trie->inicia_con(prefix);
         return result;
     }
 
     // -- Buscar transacciones que contengan un patron
     vector<string> searchContent_lugar(const std::string& patron) {
-        Trie* trie = new TrieSimple();
+        Trie* trie = new Trie();
         TxNode* nodetemp = getTransactions()->begin();
         while (nodetemp != nullptr) {
             trie->insert(nodetemp->data.place);
             nodetemp = nodetemp->next;
         }
-        vector<string> result = trie->searchContent(patron);
+        vector<string> result = trie->esta_contenido_en(patron);
         return result;
     }
 

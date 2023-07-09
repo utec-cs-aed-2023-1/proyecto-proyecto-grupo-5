@@ -180,10 +180,9 @@ void BlockChain::empieza_nombre_T(const string &prefijo){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& user : iter->data->searchFirst_nombre(prefijo)) {
-            cout << user <<"  ";
+            cout << user <<endl;
         }
         iter = iter->next;
-        cout << endl;
     }
 }
 
@@ -191,10 +190,9 @@ void BlockChain::contiene_nombre_T(const string &patron){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& user : iter->data->searchContent_nombre(patron)) {
-                cout << user <<"  ";
+                cout << user <<endl;
         }
         iter = iter->next;
-        cout << endl;
     }
 }
 
@@ -202,10 +200,9 @@ void BlockChain::empieza_lugar_T(const string &prefijo){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& place : iter->data->searchFirst_lugar(prefijo)) {
-                cout << place <<"  ";
+                cout << place <<endl;
         }
         iter = iter->next;
-        cout << endl;
    }
 }
 
@@ -213,7 +210,7 @@ void BlockChain::contiene_lugar_T(const string &patron){
     NodeB* iter = blocks->begin();
     while (iter != nullptr) {
         for (const auto& place : iter->data->searchContent_lugar(patron)) {
-              cout << place <<"  ";
+              cout << place <<endl;
         }
         iter = iter->next;
         cout << endl;

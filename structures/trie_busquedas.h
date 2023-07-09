@@ -1,6 +1,12 @@
-#include "trie.h" // Agregar esta línea para incluir el archivo de encabezado de Trie
+#ifndef TRIE_SIMPLE_H
+#define TRIE_SIMPLE_H
 
-class TrieSimple : public Trie {
+#include <string>
+#include <vector>
+using namespace std;
+
+#define ALPHA_SIZE_1 26
+class TrieSimple {
 private:
     struct TrieNode {
         TrieNode** children; // Puntero a un arreglo de punteros a nodos hijos
@@ -81,7 +87,7 @@ private:
 public:
     TrieSimple() : root(new TrieNode()) {} // Constructor que crea un nuevo nodo raíz
 
-    void insert(std::string key) override {
+    void insert(string key) {
         TrieNode* node = root;
         for (char c : key) {
             if (node->children[c - 'a'] == nullptr)
@@ -91,7 +97,7 @@ public:
         node->endWord = true; // Marcar el último nodo como final de palabra
     }
 
-    bool search(std::string key) override {
+    bool search(string key) {
         TrieNode* node = root;
         for (char c : key) {
             if (node == nullptr)
@@ -126,7 +132,7 @@ public:
         return result;
     }
 
-    void remove(std::string key) override {
+    void remove(string key)  {
         TrieNode* node = root;
         for (char c : key) {
             if (node == nullptr)
@@ -137,9 +143,15 @@ public:
             node->endWord = false; // Marcar el último nodo como no final de palabra
     }
 
-    std::string toString(std::string sep) override {
+    std::string toString(string sep)  {
         std::string result = "";
         toString(root, "", result, sep); // Llamar a toString para generar el resultado
         return result;
     }
 };
+
+#endif  // TRIE_SIMPLE_H
+
+
+
+
