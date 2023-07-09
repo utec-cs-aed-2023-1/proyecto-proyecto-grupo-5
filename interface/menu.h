@@ -105,7 +105,7 @@ void Init_Menu() {
                 string nombreUsuario = blockchain->getMaxUser(); // Obtener el valor de maxUser de la instancia de BlockChain
 
                 Transaction maxTransaction = blockchain->MaxMonto(nombreUsuario);
-                cout << "La transaccion de monto maximo para el usuario " << nombreUsuario << " es: " << endl;
+                cout << "La maxima de las transacciones es :" <<endl;
                 maxTransaction.printTransaction();
                 break;
             }
