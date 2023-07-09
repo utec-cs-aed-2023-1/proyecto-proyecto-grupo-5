@@ -1,11 +1,10 @@
 // por consola
 
-#include "blocks/blockchain.h"
+// #include "blocks/blockchain.h"
+#include "interface/menu.h"
 
 int main() {
-    BlockChain* blockchain = new BlockChain;
-    blockchain->init_blockchain();
-    delete blockchain;
+    Init_Menu();
 }
 
 // por SFML

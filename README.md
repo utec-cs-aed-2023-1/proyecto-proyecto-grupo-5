@@ -228,6 +228,8 @@ Moreno, M. V. (2022). Blockchain y algoritmo de consenso Proof of Work. *MoleQla
 
 ## Participación grupal
 
+### Pirmer entregable
+
 | Integrantes | Código | Actividad Concluida | Porcentaje de participación |
 |----------|----------|----------|----------|
 | MARIEL TOVAR TOLENTINO    | 202120575   | Parte del README.md + Generación e implementación de Datos + funciones del blockchain.h   | 100% |
@@ -237,6 +239,16 @@ Moreno, M. V. (2022). Blockchain y algoritmo de consenso Proof of Work. *MoleQla
 | ADRIAN SANDOVAL HUAMANI    | 202120522   | Parte del README.md + Investigación sobre la Interfaz + funciones del block.h   | 100% |
 
 * **transaction.h** y demás fué concluida por todos los integrantes.
+
+### Segundo entregable
+
+| Integrantes | Código | Actividad Concluida | Porcentaje de participación |
+|----------|----------|----------|----------|
+| MARIEL TOVAR TOLENTINO    | 202120575   |    | 100% |
+| LEONARDO ISIDRO SALAZAR   | 202120297   |  Dos criterios de búsqueda en *blockchain.h* + Implementación del B+  | 100% |
+| NOEMI HUARINO ANCHILLO    | 202120284   |    | 100% |
+| OMAR CHAVARRIA HUMAREDA    | 202120631   |  Dos criterios de búsqueda en *blockchain.h* + Interfaz en consola   | 100% |
+| ADRIAN SANDOVAL HUAMANI    | 202120522   |  Modificaciones de estructuras de datos + Avance de la interfaz gráfica   | 100% |
 
 
 <hr>
