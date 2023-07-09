@@ -8,9 +8,8 @@ static const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 ////////
 const string VIEW_BLOCKS = "Visualizar BlockChain";
 const string ABOUT_US = "Sobre nosotros";
-const string VIEW_TXS = "Usuarios registrados";
 const string UPDATE_TX = "Modificar";
-const string EXIT = "Atrás";
+const string EXIT = "Atras";
 ////////
 
 class AppGui {
@@ -46,7 +45,7 @@ private:  //// funcionalidades
             ABOUT_US, window.getSize().x/2, window.getSize().y /2 + 20, Color::Cyan
         );
 
-        // Titilo de la app en el menu
+        // Titulo de la app en el menu
         Message* title = new Message(
             title_app, desktop.width /2, 0, 40, Color::Yellow
         );
@@ -66,7 +65,7 @@ private:  //// funcionalidades
                             onEvent = true;
                         }
                         else if (about_us_button->on_click(window, event)) {
-                            options = Options::profileUser;
+                            options = Options::aboutUs;
                             onEvent = true;
                         }
                         
@@ -127,6 +126,10 @@ public:  //// para realizar testing sin acceso al backend de la app
                 case Options::initmenu:
                     mainMenu();
                     break;
+                
+                case Options::aboutUs:
+                    about_Us();
+                    break;
             
                 default:
                     break;
@@ -135,12 +138,12 @@ public:  //// para realizar testing sin acceso al backend de la app
         window.close();
     }
 
+
 private:   //// Views
 
     void VisualizateBlocks() {
-        // boton para ver las transacciones al seleccionar un usuario en un bloque
-        Button* view_profile_button = new Button(
-            VIEW_TXS, window.getSize().x/2, window.getSize().y /2 + 50, Color::Cyan
+        Button* exit_profile = new Button(
+            EXIT, window.getSize().x/2 + 50, window.getSize().y /2 - 40, Color::Red
         );
 
         while (window.isOpen()) {
@@ -152,8 +155,8 @@ private:   //// Views
                         return;
                     
                     case Event::MouseButtonPressed:
-                        if (view_profile_button->on_click(window, event)) {
-                            options = Options::profileUser;
+                        if (exit_profile->on_click(window, event)) {
+                            options = Options::initmenu;
                             onEvent = true;
                         }
                         
@@ -166,12 +169,12 @@ private:   //// Views
             window.clear(sf::Color::Black);
 
             if (onEvent) {
-                delete view_profile_button;
+                delete exit_profile;
                 return;
             } 
             else {
                 // visualizar
-                view_profile_button->draw(window);
+                exit_profile->draw(window);
                 window.display();
             }
         }
@@ -184,7 +187,7 @@ private:   //// Views
         );
 
         Button* exit_profile = new Button(
-            EXIT, window.getSize().x/2 + 50, window.getSize().y /2 - 40, Color::Cyan
+            EXIT, window.getSize().x/2 + 50, window.getSize().y /2 - 40, Color::Red
         );
         
         while (window.isOpen()) {
@@ -199,8 +202,10 @@ private:   //// Views
                         if (exit_profile->on_click(window, event)) {
                             options = Options::visualizate;
                             onEvent = true;
+                        } else if (updateTransaction_button->on_click(window, event)) {
+                            options = Options::changeTxForm;
+                            onEvent = true;
                         }
-                        
                         break;
 
                     default:
@@ -217,6 +222,51 @@ private:   //// Views
                 // visualizar
                 exit_profile->draw(window);
                 updateTransaction_button->draw(window);
+                window.display();
+            }
+        }
+    }
+
+    void about_Us() {
+        Message* descrip = new Message(
+            "Hola somos Grupo 3", desktop.width /2, desktop.height/2 + 70, 25,  Color::Yellow
+        );
+
+        Button* exit_profile = new Button(
+            EXIT, window.getSize().x/2 + 50, window.getSize().y /2 - 40, Color::Red
+        );
+
+        while (window.isOpen()) {
+            Event event;
+            while (window.pollEvent(event)) {
+                switch (event.type) {
+                    case Event::Closed:
+                        options = Options::closed;
+                        return;
+                    
+                    case Event::MouseButtonPressed:
+                        if (exit_profile->on_click(window, event)) {
+                            options = Options::initmenu;
+                            onEvent = true;
+                        }
+                        
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            window.clear(sf::Color::Black);
+
+            if (onEvent) {
+                delete descrip;
+                delete exit_profile;
+                return;
+            } 
+            else {
+                // visualizar
+                window.draw(descrip->getText());
+                exit_profile->draw(window);
                 window.display();
             }
         }

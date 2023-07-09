@@ -7,7 +7,9 @@ RenderWindow window(VideoMode(1920, 1060), "BlockChain05");
 
 enum Options {
     closed,         // cuando la app se cierra
+    aboutUs,        // sobre nosotros
     initmenu,       // cuando muestra el menu incial
     visualizate,    // cuando muestra la vista de bloques
-    profileUser     // Vista del perfil d eusuario
+    profileUser,    // Vista del perfil de usuario
+    changeTxForm    // vista del formulario para el cambio de transaccion
 };
