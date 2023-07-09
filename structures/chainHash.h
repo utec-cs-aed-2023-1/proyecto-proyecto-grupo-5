@@ -23,22 +23,14 @@ private:
         ~Entry() = default;
     };
 
-public:
-    friend ostream& operator<<(ostream& os, Entry* pair) {
-        os << "(" << pair.key << "," << pair.value << ") ";
-        return os;
-    }
-
-private:
-    Entry** buckets;
+    DoubleList<Entry*>** buckets;
     int capacity;              //tamanio del buckets
     int size = 0;              //cantidad de elementos totales
 
 public:
-
-    ChainHash(): capacity(capacityHashDEF) {
-        buckets = new Entry*[capacityHashDEF];
-        for (short i=0; i<capacityHashDEF; ++i) {
+    ChainHash(int capacity = capacityHashDEF): capacity(capacity) {
+        buckets = new DoubleList<Entry*>*[capacity];
+        for (short i=0; i<capacity; ++i) {
             buckets[i] = nullptr;
         }
     }
@@ -50,40 +42,58 @@ public:
         delete[] buckets;
     };
     
-    ChainHash(int capacity): capacity(capacity) {
-        buckets = new Entry*[capacity];
-        for (short i=0; i<capacity; ++i) {
-            buckets[i] = nullptr;
-        }
-    }
 
     void set(TK key, TV& value){
         if (fillFactor() >= maxFillFactor) rehashing();
 
         size_t index = hashFunction(key);
-        buckets[index] = new Entry(key, value);
+        if (buckets[index] == nullptr)
+            buckets[index] = new DoubleList<Entry*>;
+
+        buckets[index]->push_back(new Entry(key, value));
     }
 
-    TV& get(TK key){
+    NodeList<Entry*>* get(TK key){
         size_t index = hashFunction(key);
-        if (buckets[index] != nullptr)
-            return buckets[index]->value;
-        throw std::out_of_range("key unbound in hashtable");
+        NodeList<Entry*>* it = buckets[index]->begin();
+        while (it != nullptr) {
+            if (it->data->key == key)   break;
+            it = it->next;
+        }
+        return it;
     }
+
+    // Entry*& find(NodeList<Entry*>*& node, TK key) {
+    //     while (node != nullptr && node->data->key != key) {
+    //         node = node->next;
+    //     }
+    //     return node;
+    // }
 
     void viewHash() {
         for (int i=0; i<capacity; ++i) {
-            cout << "Bucket " << i+1 << " size: " << bucket_size(i) << "\n -- ";
-            if (!buckets[i] == nullptr)
-                cout << buckets[i] << " ";
+            if (buckets[i] != nullptr) {
+                auto it = buckets[i]->begin();
+                while (it != nullptr) {
+                    cout << it->data << " ";
+                    it = it->next;
+                }
+            }
+            cout << buckets[i] << " ";
         } cout << endl;
     }
 
     bool search(TK key) {
         size_t index = hashFunction(key);
-        cout << "idx hash" << index << endl;
-        return buckets[index] != nullptr;
-        
+        if (buckets[index] != nullptr) {
+            auto it = buckets[index]->begin();
+            while (it != nullptr) {
+                if (it->data->key == key)
+                    return true;
+                it = it->next;
+            }
+        }
+        return false;
     }
 
     int bucket_count() const {
@@ -102,19 +112,32 @@ private:
     void rehashing(){
         // Aumentar la capacidad del arreglo original
         capacity *= 2;
-        Entry** newbuckets = new Entry*[capacity];
+        DoubleList<Entry*>** newbuckets = new DoubleList<Entry*>*[capacity];
+        for (short i=0; i<capacity; ++i) {
+            buckets[i] = nullptr;
+        }
 
         // Insertar todos los elementos del arreglo original en el nuevo arreglo
-        size_t index;
+        size_t new_i;
         for (short i=0; i<(int)capacity/2; ++i) {
-            index = hashFunction(buckets[i]->key);
-            newbuckets[index] = move(buckets[i]);
+            
+            if (buckets[i] != nullptr) {
+                auto it = buckets[i]->begin();
+                while (it != nullptr) {
+                    new_i = hashFunction(it->data->key);
+                    if (newbuckets[new_i] != nullptr)
+                        newbuckets[new_i] = new DoubleList<Entry*>;
+                    newbuckets[new_i]->push_back(it->data);
+                    it = it->next;
+                }
+            }
         }
         buckets = newbuckets;
+        delete newbuckets;
     }
 
     size_t hashFunction(TK key) {
-        stringstream skey;   skey << key;          // se llama a operator << para pasar a string
+        stringstream skey;   skey << key;        // se llama a operator << para pasar a string
         string strkey = sha256(skey.str());
 
         std::stringstream stream;

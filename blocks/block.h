@@ -74,7 +74,7 @@ public:
         ss << index << timestamp << previousHash << nonce;
 
         // agregamos las transacciones
-        TxNode* nodetemp = getTransactions().begin();
+        TxNode* nodetemp = list_data.begin();
         while (nodetemp != nullptr) {
             ss << nodetemp->data;
             nodetemp = nodetemp->next;
@@ -107,7 +107,7 @@ public:
         std::cout << "-- Previous Hash: " << previousHash << endl;
         std::cout << "-- Hash: " << hash << endl;
         std::cout << "-- Transactions :" << endl;
-        TxNode* nodetemp = getTransactions().begin();
+        TxNode* nodetemp = list_data.begin();
         while (nodetemp != nullptr) {
             std::cout << "---------" << endl;
             nodetemp->data.printTransaction();
@@ -154,15 +154,6 @@ public:
         --cantTransactions;
     }
 
-    // devuelve el hashcode en lectura
-    string getHash() {
-        return hash;
-    }
-
-    // devuelve la lista de transacciones
-    TxList getTransactions() {
-        return list_data;
-    } 
 
     // Valida si se encuentra la transaccion 
     bool search(Transaction transaction) {

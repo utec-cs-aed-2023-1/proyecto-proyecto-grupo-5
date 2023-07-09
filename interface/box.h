@@ -45,8 +45,6 @@ public:
     void moveFrame(float pos_x, float pos_y) {
         position.setPosition(pos_x - rectangle->getSize().x/2,
                              pos_y + rectangle->getSize().y/2);
-         cout << "pos rec x " << pos_x << "-" << rectangle->getSize().x << endl;
-         cout << "pos rec y " << pos_y << "-" <<  rectangle->getSize().y << endl;
         rectangle->setPosition(position.x, position.y);
         message->centering(position.x, position.y, rectangle->getSize());
     }

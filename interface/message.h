@@ -39,7 +39,6 @@ public:
         sf::FloatRect textBounds = sfml_text.getLocalBounds();
         sfml_text.setOrigin(textBounds.left + textBounds.width / 2, textBounds.top + textBounds.height / 2);
         sfml_text.setPosition(pos_x + dimensions.x / 2, pos_y + dimensions.y / 2);
-        std::cout << "pos message center " << sfml_text.getPosition().x << " " << sfml_text.getPosition().y << std::endl;
     }
 
     void pop_char() {
