@@ -10,10 +10,10 @@ void printMenu() {
     cout << "2. Busqueda por igualdad a nombre de usuario" << endl;
     cout << "3. Busqueda por rango en monto" << endl;
     cout << "4. Busqueda por rango en fecha" << endl; // no seguro
-    cout << "5. Usuario inicia con" << endl;
-    cout << "6. Lugar inicia con" << endl;
-    cout << "7. Patron contenido en el nombre" << endl;
-    cout << "8. Patron contenido en el lugar" << endl;  //////////////////////////
+    cout << "5. Usuario inicia con" << endl; // listo
+    cout << "6. Lugar inicia con" << endl;  //listo
+    cout << "7. Patron contenido en el nombre" << endl; // listo
+    cout << "8. Patron contenido en el lugar" << endl;  // listo
     cout << "9. Buscar minimo por monto" << endl;
     cout << "10. Buscar maximo por monto" << endl;
     cout << "11. Recalculo en cascada" << endl;
