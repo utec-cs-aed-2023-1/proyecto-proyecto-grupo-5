@@ -6,10 +6,21 @@ using namespace std;
 void printMenu() {
     cout << "====== Menu ======" << endl;
     cout << "1. Mostrar cadena de Blocks" << endl;
-    cout << "2. Agregar transaccion" << endl;
-    cout << "3. Salir" << endl;
+    cout << "2. Busqueda por igualdad a nombre de usuario" << endl;
+    cout << "3. Busqueda por rango en monto" << endl;
+    cout << "4. Busqueda por rango en fecha" << endl;
+    cout << "5. Usuario inicia con" << endl;
+    cout << "6. Lugar inicia con" << endl;
+    cout << "7. Esta contenido en el nombre" << endl;
+    cout << "8. Esta contenido en el lugar" << endl;
+    cout << "9. Buscar minimo por monto" << endl;
+    cout << "10. Buscar maximo por monto" << endl;
+    cout << "11. Recalculo en cascada" << endl;
+    cout << "12. Agregar transaccion" << endl; // o puede ser modificar bloque
+    cout << "13. Eliminar bloque o transaccion" << endl;
+    cout << "14. Salir" << endl;
     cout << "==================" << endl;
-    cout << "Ingrese su opcion: ";
+    cout << "Seleccione una opción: ";
 }
 
 

@@ -8,6 +8,7 @@
 #include "../structures/avl.h"
 #include "../structures/doubleList.h"
 #include "../utils/SHA256.h"
+#include "../structures/trie_busquedas.h"
 #include "transaction.h"
 
 using namespace std;
@@ -36,6 +37,7 @@ public:
     TxList* list_data = new TxList ;
     TxAVL* tree_amount = new TxAVL(minor_amount, mayor_amount);
     TxAVL* tree_date = new TxAVL(minor_date, mayor_date);
+    Trie *trie = new TrieSimple();
     
     string previousHash;           // Hash del bloque anterior en la cadena
     string hash;                   // Hash del bloque actual
@@ -53,8 +55,10 @@ public:
     }
 
     ~Block() {
+        delete list_data;
         delete tree_amount;
         delete tree_date;
+        delete trie;
     }
 
 
@@ -122,10 +126,11 @@ public:
 
 
     // Inserta una nueva transaccion
-    void insert(Transaction transaction) {
+    void insert(Transaction transaction,string nombreUsuario) {
         list_data->push_back(transaction);
         tree_amount->insert(transaction);
         tree_date->insert(transaction);
+        //trie->insert(nombreUsuario);
         this->hash = calculateHash();
         mineBlock();
         ++cantTransactions;
@@ -188,6 +193,19 @@ public:
     Transaction minDate() {
         return tree_date->minValue();
     }
+
+    // -- Buscar nombres de usuarios que empiecen con un prefijo
+    vector<string> searchFirst(string prefix) {
+        vector<string> result = trie->searchFirst(prefix);
+        return result;
+    }
+
+    // -- Buscar transacciones que contengan un patron
+    vector<string> searchContent(const std::string& patron) {
+        vector<string> result = trie->searchContent(patron);
+        return result;
+    }
+
 
     TxList* rangeDate(string date1, string date2); 
 

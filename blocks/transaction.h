@@ -21,6 +21,11 @@ struct Transaction {
         this->place = place;
         this->date = date;
         this->amount = amount;
+    }
+
+    // obtener el nombre del cliente
+    string getClient() {
+        return client;
     } 
 
     // Función que imprime la transacción en consola.
