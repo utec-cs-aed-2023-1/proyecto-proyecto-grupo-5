@@ -16,16 +16,13 @@ void printMenu() {
     cout << "8. Patron contenido en el lugar" << endl;
     cout << "9. Buscar minimo por monto" << endl;
     cout << "10. Buscar maximo por monto" << endl;
-    cout << "11. Recalculo en cascada" << endl;
-    cout << "12. Agregar transaccion" << endl;
-    cout << "13. Actualizar transaccion" << endl;
-    cout << "14. Eliminar bloque o transaccion" << endl;
-    cout << "15. Salir" << endl;
+    cout << "11. Salir" << endl;
     cout << "==================" << endl;
     cout << "Seleccione una opcion: ";
 }
 
 void Init_Menu() {
+
     BlockChain* blockchain = new BlockChain;
 
     int option;
@@ -42,14 +39,25 @@ void Init_Menu() {
                 blockchain->init_blockchain();
                 break;
             }
+
+
             case 2: {
                 // Búsqueda por igualdad a nombre de usuario
-                string nombre_igual;
-                cout << "Ingrese el nombre que desea buscar: ";
-                cin >> nombre_igual;
-                blockchain->buscandoBloquexKey(nombre_igual);
+                string nombreCompleto;
+                cout << "Ingrese el nombre completo del usuario que desea buscar: ";
+                cin.ignore();
+                getline(cin, nombreCompleto);
+                Block* block = blockchain->buscandoBloquexKey(nombreCompleto);
+                if (block != nullptr) {
+                    cout << "Datos del usuario encontrado:" << endl;
+                    block->printBlock();
+                } else {
+                    cout << "Usuario no encontrado." << endl;
+                }
                 break;
             }
+
+
             case 3: {
                 // Busqueda por rango en monto
                 // Implementar lógica aquí
@@ -111,59 +119,16 @@ void Init_Menu() {
                     break;
                 }
 
-
-
-            case 11: {
-                // Agregar aquí la lógica para el recálculo en cascada
-                string nombre;
-                cout << "Introduce el nombre de usuario donde se desea hacer el recálculo en cascada: ";
-                cin >> nombre;
-                blockchain->cascada(nombre);
-                break;
-            }
-            case 12: {
-                // Agregar aquí la lógica para agregar una transacción
-                string nombreUsuario;
-                cout << "Introduce el nombre de usuario donde se desea hacer un retiro: ";
-                cin >> nombreUsuario;
-
-                string lugar;
-                cout << "Introduce el lugar donde se realiza el retiro: ";
-                cin >> lugar;
-
-                float monto;
-                cout << "Introduce el monto a retirar: ";
-                cin >> monto;
-
-                string fecha;
-                cout << "Introduce la fecha en la que se realiza el retiro: ";
-                cin >> fecha;
-
-                blockchain->insertRetiro(nombreUsuario, lugar, monto, fecha);
-                break;
-            }
-            case 13: {
-                // Agregar aquí la lógica para actualizar una transacción
-                // void updateTx(Transaction changed, string place, int amount, string date)
-                Block* block = new Block;
-                //FALTA AFINAR block->updateTx();
-                break;
-            }
-            case 14: {
-                // Agregar aquí la lógica para eliminar una transacción
-                break;
-            }
-            case 15: {
+                case 11: {
                 cout << "Saliendo del programa..." << endl;
                 break;
             }
             default:
                 cout << "Opcion invalida. Intente nuevamente." << endl;
                 break;
-        }
-
+        }   
         cout << endl;
-    } while (option != 15);
+    } while (option != 11);
 
     delete blockchain;
 }

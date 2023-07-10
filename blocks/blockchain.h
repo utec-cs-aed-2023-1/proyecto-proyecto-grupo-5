@@ -143,7 +143,7 @@ BlockChain::BlockChain(const string path = "../assets/data/datamin.csv") {
     file.close();
 
     // Imprimir la transacción máxima y el usuario correspondiente
-    cout << "La transaccion de monto máaximo para el usuario " << maxUser << " es: " << maxTransaction << endl;
+    cout << "La transaccion de monto maximo para el usuario " << maxUser << " es: " << maxTransaction << endl;
 
     // Imprimir la transacción mínima y el usuario correspondiente
     cout << "La transaccion de monto minimo para el usuario " << minUser << " es: " << minTransaction << endl;
