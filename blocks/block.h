@@ -59,7 +59,6 @@ public:
         delete tree_date;
     }
 
-
     // constructor copia a partir de otro bloque
     Block(const Block &other) {
         this->index = other.index;
@@ -67,7 +66,6 @@ public:
         this->previousHash = other.previousHash;
         this->hash = other.hash;
     }
-
 
     // Calcula el codigoash con la información del bloque
     string calculateHash() {
@@ -84,7 +82,6 @@ public:
 
         return sha256(ss.str());
     }
-
 
     // Realiza el minado para vakidar la seguridad del bloque por el codigohash
     // * Calcula el hash del bloque actual y se compara con el hash objetivo

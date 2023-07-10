@@ -5,7 +5,7 @@
 using namespace std;
 
 void printMenu() {
-    cout << "====== Menu ======" << endl;
+    std::cout << "====== Menu ======" << endl;
     cout << "1. Mostrar cadena de Blocks" << endl;
     cout << "2. Busqueda por igualdad a nombre de usuario" << endl;
     cout << "3. Busqueda por rango en monto" << endl;
@@ -92,23 +92,25 @@ void Init_Menu() {
                 blockchain->contiene_lugar_T(a_lugar_buscar);
                 break;
             }
-            case 9: {
-                // Buscar el monto mínimo
-                string nombreUsuario = blockchain->getMaxUser(); // Obtener el valor de maxUser de la instancia de BlockChain
-                Transaction maxTransaction = blockchain->MaxMonto(nombreUsuario);
-                cout << "La transaccion de monto maximo para el usuario " << nombreUsuario << " es: " << endl;
-                maxTransaction.printTransaction();
-                break;
-            }
-            case 10: {
-                // Buscar el monto máximo
-                string nombreUsuario = blockchain->getMaxUser(); // Obtener el valor de maxUser de la instancia de BlockChain
 
-                Transaction maxTransaction = blockchain->MaxMonto(nombreUsuario);
-                cout << "La maxima de las transacciones es :" <<endl;
-                maxTransaction.printTransaction();
-                break;
-            }
+
+            case 9: {
+                    // Buscar el monto mínimo
+                    string nombreUsuario1 = blockchain->getMinUser(); // Obtener el valor de minUser de la instancia de BlockChain
+                    Transaction minTransaction = blockchain->MinMonto(nombreUsuario1);
+                    cout << "La transaccion minimo de " << nombreUsuario1 << " es: " << endl;
+                    minTransaction.printTransaction();
+                    break;
+                }
+                case 10: {
+                    // Buscar el monto máximo
+                    string nombreUsuario = blockchain->getMaxUser(); // Obtener el valor de maxUser de la instancia de BlockChain
+                    Transaction maxTransaction = blockchain->MaxMonto(nombreUsuario);
+                    cout << "La transaccion maximo de " << nombreUsuario << " es: " << endl;
+                    maxTransaction.printTransaction();
+                    break;
+                }
+
 
 
             case 11: {
