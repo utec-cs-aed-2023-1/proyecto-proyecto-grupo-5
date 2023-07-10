@@ -25,9 +25,9 @@
       Funcionalidad de la aplicación
       <ul>
         <li><a href="#estructuras-de-datos">Estructuras de datos</a></li>
+        <li><a href="#estructuras-de-datos-para- los-criterios-de-búsquedas">Estructuras de datos para los criterios de búsquedas</a></li>
         <li><a href="#proof-of-work">Proof of work</a></li>
         <li><a href="#análisis-algorítmico">Análisis algorítmico</a></li>
-        <li><a href="#interfaz-gráfica">Interfaz gráfica</a></li>
       </ul>
     </a></li>
     <li><a href="#referencias-bibliográficas">Referencias bibliográficas</a></li>
@@ -66,6 +66,14 @@ El dominio transaccional que hemos escogido es : Retiros de dinero (cliente, lug
 ## Importancia del Blockchain
  
 La importancia de blockchain radica en su capacidad para proporcionar seguridad en las transacciones a través de su registro distribuido en bloques. Cada bloque está enlazado con el bloque anterior mediante una función criptográfica, lo que garantiza la integridad de la cadena. Esto significa que, en caso de un intento de modificación o ataque, todos los bloques posteriores se vuelven inaccesibles o inválidos, lo que proporciona una mayor protección contra la manipulación de datos.
+
+En el caso de **retiro de dinero**, el Blockchain es importante debido a su ***seguridad, transparencia y eliminación de intermediarios***. Proporciona transacciones más rápidas y eficientes, y permite el acceso global sin restricciones geográficas. A continuación se explicará cada razón de importancia:
+
+* **Transparencia:** Las transacciones realizadas en el blockchain son visibles para todos los participantes de la red. Significa que las transacciones no pueden ser alteradas sin el consenso de la mayoría de los participantes, es por eso que se vuelve confiable.
+
+* **Seguridad:**  Cada transacción es verificada y registrada en la cadena de bloques, lo que reduce significativamente el riesgo de fraude y manipulación. Es decir, el blockchain usa criptografía avanzada y segura para garantizar la seguridad de las transacciones, valga la redundancia.
+
+* **Elimanción de intermediarios:** El blockchain permite que las transacciones se realicen de manera directa y segura entre las partes involucradas, sin intermediarios que validen la transacción.  
 
 <hr>
 
@@ -107,7 +115,7 @@ Escenarios donde se puede utilizar **doublelist**:
 
 4. *Recorrido bidireccional de la lista*: Al ser una lista doblemente enlazada, puedes recorrerla tanto hacia adelante como hacia atrás. Esto puede ser útil si necesitas realizar operaciones de búsqueda o análisis en las transacciones en función de diferentes criterios, como buscar transacciones de un cliente específico o realizar un análisis histórico de los retiros.  
 
-- ### Hash
+- ### Hash 
 
 <div align="center">
     <img src="assets/hash.jpeg" width="algo">
@@ -118,6 +126,78 @@ Escenarios donde se puede utilizar **doublelist**:
 2. *Búsqueda rápida de transacciones*: Si necesitas buscar transacciones de retiro de dinero según criterios específicos, como el número de cliente o la fecha, una tabla hash puede ser muy útil. Puedes utilizar diferentes campos de la transacción como claves en la tabla hash y realizar búsquedas rápidas basadas en esos campos. Por ejemplo, si quieres encontrar todas las transacciones de un cliente en particular, simplemente buscarías en la tabla hash utilizando el identificador del cliente como clave.
 
 3. *Detección de transacciones duplicadas*: La tabla hash puede ayudarte a evitar la inserción de transacciones duplicadas de retiro de dinero. Puedes utilizar la función de hash para generar una clave única para cada transacción y verificar si ya existe una transacción con la misma clave en la tabla hash. Esto te permitirá evitar la duplicación de transacciones y mantener la integridad de los datos.
+
+- ### Trie
+
+<div align="center">
+    <img src="assets/trie.png" width="algo">
+</div><br>
+<hr>
+
+Un Trie Simple, también conocido como Trie o árbol de prefijos, es una *estructura de datos* basada en árboles que se utiliza para almacenar y recuperar información de manera eficiente. Se utiliza especialmente en algoritmos y estructuras de datos para operaciones de **búsqueda, inserción y eliminación de palabras o cadenas de caracteres**.
+
+La estructura de datos Trie Simple es utilizada en algunos sistemas blockchain para almacenar y organizar la información de manera eficiente. Es especialmente útil para asegurar la integridad de los contenidos almacenados en el blockchain.
+
+Además, en el contexto del *Blockchain*, un Trie puede utilizarse para almacenar las transacciones y otros datos relevantes. Cada transacción o dato se divide en fragmentos más pequeños y se almacena en los nodos correspondientes del Trie. Esto permite una búsqueda y recuperación eficiente de la información en función de su contenido.
+
+- ### AVL
+
+<div align="center">
+    <img src="assets/avl_tree.jpg" width="algo">
+</div><br>
+<hr>
+
+Un AVL Tree es una *estructura de datos en forma de árbol binario de búsqueda balanceado*. El objetivo del equilibrio en un AVL Tree es garantizar un tiempo de búsqueda y operaciones eficiente. Mantener el árbol balanceado asegura que la altura del árbol sea ***O(log n)***, donde *n* es el número de nodos en el árbol. Como resultado, las operaciones de búsqueda, inserción y eliminación tienen una complejidad temporal promedio de O(log n).
+
+El AVL Tree se utiliza en aplicaciones donde es necesario un acceso rápido y eficiente a los datos y se requiere que las operaciones de inserción y eliminación se realicen de manera rápida. Al ser una estructura de datos autoequilibrada, el AVL Tree es adecuado para escenarios en los que los datos se actualizan con frecuencia y es necesario mantener un rendimiento óptimo.
+
+Sobre la relación con el Blockchain, cada vez que se realiza un retiro de dinero en el blockchain, se registra una transacción. Estas transacciones se pueden almacenar en un AVL Tree. Cada nodo del árbol contendría el monto de una transacción y de podría organizar el árbol en función del monto. Por otro lado, el uso de un AVL Tree en este caso permitiría realizar búsquedas eficientes de mínimo y máximo monto, ya que la estructura del árbol asegura un tiempo de búsqueda óptimo. Además, dado que el AVL Tree se mantiene balanceado automáticamente, el rendimiento de las operaciones de inserción y búsqueda se mantendrá en su mejor estado.
+
+## Estructuras de datos para los criterios de búsquedas
+
+### Criterio de búsqueda 1:
+
+```
+Igual a X:
+    TV search(TK key)
+```
+* Para este criterio de búsqueda, usamos la estructura de datos ***ChainHash***. 
+* Especificamente, usamos la función searh(TK key), donde nuestro *key* es el nombre del usuario.
+
+### Criterio de búsqueda 2: 
+
+```
+Inicia con:
+    vector<TV> start_with(string prefix)
+```
+* Para este criterio de búsqueda, usamos la estructura de datos **Trie Simple**. 
+* Usamos este criterio de búsqueda para el *nombre* del usuario y el *lugar*.
+
+### Criterio de búsqueda 3:
+```
+Está contenido en:
+    vector<TV> contains(string pattern)
+```
+* Para este criterio de búsqueda, también usamos la estructura de datos **Trie Simple**. 
+* Usamos este criterio de búsqueda para el *nombre* del usuario y el *lugar*.
+
+### Criterio de búsqueda 4:
+```
+Máximo valor de:
+    TV max_value( )
+```
+* Para este criterio de búsqueda, usamos la estructura de datos **AVL**. 
+* Usamos este criterio para hallar el monto máximo retirado en las transacciones.
+* En el *block.h* se puedo haber usado 2 heaps de Transactions, que sería O(1) para hallar maximos, pero implica mucha memoria. Si utilizamos solo AVL de Transactions es menos memoria.
+
+### Criterio de búsqueda 5:
+```
+Mínimo valor de:
+    TV min_value( )
+```
+* Para este criterio de búsqueda, usamos la estructura de datos **AVL**. 
+* Usamos este criterio para hallar el monto mínimo retirado en las transacciones.
+* En el *block.h* se puedo haber usado 2 heaps de Transactions, que sería O(1) para hallar mínimos, pero implica mucha memoria. Si utilizamos solo AVL de Transactions es menos memoria. Es la misma razón que en el criterior anterior.
 
 <hr>
 
@@ -162,36 +242,27 @@ Obtiene la transacción con el monto más alto de un usuario específico en el b
 
 Obtiene la transacción con el monto más bajo de un usuario específico en el blockchain.Se obtiene por el `top` del Min-Heap de transacciones por monto **$\mathcal{O}(1)$**
 
-- `BlockChain::downloadFile(const std::string& path)`
-
-Descarga las transacciones del blockchain en un archivo de texto en la ubicación especificada. En ella recorre todos los bloques existentes en el BlockChain y muestra la información de cada uno. **$\mathcal{O}(n)$**
-
 <hr>
 
-## Interfaz gráfica
-
-- Se está trabajando con SFML.
-- Interfaz gráfica en proceso
-
-
-<hr>
 
 # Ambiente de la aplicación
 
 ## Requerimientos
 
 - Compilador g++ de [MinGW-w64](https://www.mingw-w64.org/downloads/).
-- Bibioteca [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/) desde la versión 2.4 o 2.5.
 - [Make](https://gnuwin32.sourceforge.net/packages/make.htm) para Windows.
  
 ## ¿Cómo se ejecuta?
 
-1. Agregar el directorio `C:\SFML-2.5.x` en las variables del sistema.
-2. Agregar el directorio `C:\Program Files (x86)\GnuWin32\bin` en las variables del sistema. 
-3. Inicia la aplicación con estos comandos: 
+1. Entrar al directorio en el que clonaste o guardaste el proyecto.
+2. Inicia la aplicación con estos comandos: 
 
 ```bash
-make clean && make run
+g++ main.cpp -o menu
+```
+Y después:
+```bash
+.\menu
 ```
 
 
@@ -200,7 +271,7 @@ make clean && make run
 # Conclusiones
 
 - El blockchain nos ha ayudado a poder proteger mejor nuestra estructura de datos y de esa manera darle confianza a nuestro cliente para con la integridad de sus datos y demás. 
-- Las estructuras de datos como **heap, chain hash y double list** son fundamentales en **blockchain** debido a su importancia en la eficiencia y seguridad del sistema. El heap permite una gestión eficiente de las transacciones y bloques, asegurando un ordenamiento óptimo. El chain hash proporciona una forma rápida de acceder a los bloques anteriores y verificar la integridad de la cadena. El double list permite un acceso rápido y eficiente a los datos, facilitando la validación y el seguimiento de transacciones en la cadena de bloques. En resumen, estas estructuras de datos mejoran la velocidad, la seguridad y la escalabilidad del sistema blockchain.
+- Las estructuras de datos como **heap, chain hash y double list** y otros son fundamentales en **blockchain** debido a su importancia en la eficiencia y seguridad del sistema. El heap permite una gestión eficiente de las transacciones y bloques, asegurando un ordenamiento óptimo. El chain hash proporciona una forma rápida de acceder a los bloques anteriores y verificar la integridad de la cadena. El double list permite un acceso rápido y eficiente a los datos, facilitando la validación y el seguimiento de transacciones en la cadena de bloques. En resumen, estas estructuras de datos mejoran la velocidad, la seguridad y la escalabilidad del sistema blockchain.
 
 <hr>
 
@@ -236,7 +307,6 @@ Moreno, M. V. (2022). Blockchain y algoritmo de consenso Proof of Work. *MoleQla
 | OMAR CHAVARRIA HUMAREDA    | 202120631   | Parte del README.md + Carpeta: structures + funciones del block.h   | 100% |
 | ADRIAN SANDOVAL HUAMANI    | 202120522   | Parte del README.md + Investigación sobre la Interfaz + funciones del block.h   | 100% |
 
-* **transaction.h** y demás fué concluida por todos los integrantes.
-
+* **transaction.h** y el resto de estructuras fueron concluidas por todos los integrantes.
 
 <hr>
