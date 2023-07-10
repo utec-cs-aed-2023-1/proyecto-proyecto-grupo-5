@@ -153,6 +153,14 @@ El AVL Tree se utiliza en aplicaciones donde es necesario un acceso rápido y ef
 
 Sobre la relación con el Blockchain, cada vez que se realiza un retiro de dinero en el blockchain, se registra una transacción. Estas transacciones se pueden almacenar en un AVL Tree. Cada nodo del árbol contendría el monto de una transacción y de podría organizar el árbol en función del monto. Por otro lado, el uso de un AVL Tree en este caso permitiría realizar búsquedas eficientes de mínimo y máximo monto, ya que la estructura del árbol asegura un tiempo de búsqueda óptimo. Además, dado que el AVL Tree se mantiene balanceado automáticamente, el rendimiento de las operaciones de inserción y búsqueda se mantendrá en su mejor estado.
 
+
+<h1 align="center">Diagrama UML de Clases</h1>
+
+
+<div align="center">
+    <img src="assets/Blockchain.png" width="algo">
+</div><br>
+
 ## Estructuras de datos para los criterios de búsquedas
 
 ### Criterio de búsqueda 1:
