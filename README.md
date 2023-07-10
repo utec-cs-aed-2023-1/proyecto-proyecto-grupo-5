@@ -262,7 +262,9 @@ Y después:
 # Conclusiones
 
 - El blockchain nos ha ayudado a poder proteger mejor nuestra estructura de datos y de esa manera darle confianza a nuestro cliente para con la integridad de sus datos y demás. 
-- Las estructuras de datos como **heap, chain hash y double list** y otros son fundamentales en **blockchain** debido a su importancia en la eficiencia y seguridad del sistema. El heap permite una gestión eficiente de las transacciones y bloques, asegurando un ordenamiento óptimo. El chain hash proporciona una forma rápida de acceder a los bloques anteriores y verificar la integridad de la cadena. El double list permite un acceso rápido y eficiente a los datos, facilitando la validación y el seguimiento de transacciones en la cadena de bloques. En resumen, estas estructuras de datos mejoran la velocidad, la seguridad y la escalabilidad del sistema blockchain.
+- Aplicamos técnicas de hashing y proof of work como se mencionó para mantener la integridad de los datos en los bloques y hacer que las operaciones sean seguras.
+- Fuimos capaces adaptar las estructuras de datos vistas y hecha en clase a nuestro proyecto. Asimismo, logramos identificar la estructura de datos adecuada para cada criterio de búsqueda.
+- Las estructuras de datos como **chain hash y double list** y otros son fundamentales en **blockchain** debido a su importancia en la eficiencia y seguridad del sistema. Por ejemplo, el double list permite un acceso rápido y eficiente a los datos, facilitando la validación y el seguimiento de transacciones en la cadena de bloques. En resumen, estas estructuras de datos mejoran la velocidad, la seguridad y la escalabilidad del sistema blockchain.
 
 <hr>
 
