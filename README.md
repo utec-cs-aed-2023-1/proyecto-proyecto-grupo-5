@@ -213,34 +213,25 @@ El proof of work que implementamos es una verificación en la cual el número de
 
 Estas son los métodos implementados actualmente en el BlockChain:
 
-- `BlockChain::searchUser(const string& username, const string& password)` 
+- `Block* BlockChain::buscandoBloquexKey(const string& nombreUsuario)` 
 
-Esta función valida si existe el bloque correspondiente al usuario y su contraseña (previamente verificada). En ella se busca solo por el DoubleList, complejidad **$\mathcal{O}(n)$**(proximamente se reducirá a **$\mathcal{O}(log \ n)$** a través de un árbol BST o Btree)
+Esta función valida si existe el bloque correspondiente al usuario. En ella se implementa el ChainHash.
 
- - `BlockChain::insertTransaction()`:
+ - `void insert(Transaction transaction)`:
 
 Esta función inserta una nueva transacción en el Blockchain. En ella se insertan internamente en las estructuras Heap **$\mathcal{O}(log \ n)$** y DoubleList **$\mathcal{O}(1)$**.
 
-- `BlockChain::createUser(const string &username, const string &password, float amount, const string &date)`
+- `void BlockChain::crearUsuario(const string &nombreUsuario)`
 
 Esta función crea un nuevo bloque que pertenecerá al usuario. Internamente realiza un push del nuevo bloque en el DoubleList **$\mathcal{O}(1)$** y en el HasTable **$\mathcal{O}(1)$**.
 
+- `BlockChain::MaxMonto(const std::string &nombreUsuario)`
 
-- `BlockChain::MaxDate(const std::string &username, const std::string &password)`
+Obtiene la transacción con el monto más alto de las transacciones en el blockchain.
 
-Obtiene la transacción con la fecha más reciente de un usuario específico en el blockchain. Se obtiene por el `top` del Max-Heap de transacciones por fecha **$\mathcal{O}(1)$**
+- `BlockChain::MinMonto(const std::string &nombreUsuario)`
 
-- `BlockChain::MinDate(const std::string &username, const std::string &password)`
-
-Obtiene la transacción con la fecha más antigua de un usuario específico en el blockchain. Se obtiene por el `top` del Min-Heap de transacciones por fecha **$\mathcal{O}(1)$**
-
-- `BlockChain::MaxAmount(const std::string &username, const std::string &password)`
-
-Obtiene la transacción con el monto más alto de un usuario específico en el blockchain. Se obtiene por el `top` del Max-Heap de transacciones por monto **$\mathcal{O}(1)$**
-
-- `BlockChain::MinAmount(const std::string &username, const std::string &password)`
-
-Obtiene la transacción con el monto más bajo de un usuario específico en el blockchain.Se obtiene por el `top` del Min-Heap de transacciones por monto **$\mathcal{O}(1)$**
+Obtiene la transacción con el monto más bajo de las transacciones en el blockchain.
 
 <hr>
 
