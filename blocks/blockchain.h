@@ -94,7 +94,7 @@ BlockChain::BlockChain(const string path = "../assets/data/datamin.csv") {
 }
 */
 
-BlockChain::BlockChain(const string path = "../assets/data/datamin.csv") {
+BlockChain::BlockChain(const string path = "../assets/data/datos.csv") {
     ifstream file;
     file.open(path);
 
@@ -125,7 +125,8 @@ BlockChain::BlockChain(const string path = "../assets/data/datamin.csv") {
         float amount = stof(data[3]);
         string date = data[2];
 
-        crearUsuario(username);
+        if(!usersHash->search(username))
+            crearUsuario(username);
         insertRetiro(username, place, amount, date);
 
         // Si la transacción actual es más grande que la transacción máxima, actualizar la transacción y el usuario máximos
