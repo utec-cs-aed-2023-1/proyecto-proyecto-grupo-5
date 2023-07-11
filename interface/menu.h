@@ -14,8 +14,8 @@ void printMenu() {
     cout << "6. Lugar inicia con" << endl;
     cout << "7. Patron contenido en el nombre" << endl;
     cout << "8. Patron contenido en el lugar" << endl;
-    cout << "9. Buscar maximo por monto" << endl;
-    cout << "10. Buscar minimo por monto" << endl;
+    cout << "9. Buscar minimo por monto" << endl;
+    cout << "10. Buscar maximo por monto" << endl;
     cout << "11. Salir" << endl;
     cout << "==================" << endl;
     cout << "Seleccione una opcion: ";
